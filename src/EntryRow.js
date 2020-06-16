@@ -4,22 +4,28 @@ import EntryCard from "./EntryCard";
 
 const EntryRow = (props) => {
   const [entries, setEntries] = useState([]);
+  const [location, setLocation] = useState([]);
 
-  const getEntries = (locationId) => {
-    apiManager.getEntriesByLocation(locationId).then((r) => {
+  // get entries based on location and event chosen from dropdowns
+  const getEntries = (locationId, eventId) => {
+    apiManager.getEntriesByLocationAndEvent(locationId, eventId).then((r) => {
       setEntries(r);
     });
   };
 
   useEffect(() => {
-    getEntries(props.chosenLocation);
-  }, [props.chosenLocation]);
+    getEntries(props.chosenLocation, props.chosenEvent);
+  }, [props.chosenLocation, props.chosenEvent]);
 
   return (
     <>
       <div>
+        Time<span>Vehicle Number</span>
+        <span>Attendee Count</span>
+      </div>
+      <div>
         {entries.map((entry) => (
-            <EntryCard key={entry.id} entry={entry} {...props} />
+          <EntryCard key={entry.id} entry={entry} {...props} />
         ))}
       </div>
     </>

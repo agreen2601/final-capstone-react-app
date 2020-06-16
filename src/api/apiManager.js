@@ -4,8 +4,14 @@ export default {
   getAllEntries() {
     return fetch(`${baseurl}/entries`).then((r) => r.json());
   },
+  getSingleLocation(locationId) {
+    return fetch(`${baseurl}/locations/${locationId}`).then((r) => r.json())
+  },
   getEntriesByLocation(locationId) {
     return fetch(`${baseurl}/entries?locationID=${locationId}`).then((r) => r.json())
+  },
+  getEntriesByLocationAndEvent(locationId, eventID) {
+    return fetch(`${baseurl}/entries?locationID=${locationId}&eventID=${eventID}`).then((r) => r.json())
   },
   getAllLocations() {
     return fetch(`${baseurl}/locations`).then((r) => r.json());
