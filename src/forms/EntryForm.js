@@ -40,7 +40,14 @@ const EntryForm = (props) => {
     apiManager.postEntry(entry).then(() => {
       document.getElementById("attendee_count").value = "";
       document.getElementById("vehicle_number").value = "";
-      setEntry({attendee_count: "", vehicle_number: ""})
+      setEntry({
+        attendee_count: "",
+        vehicle_number: "",
+        location_id: chosenLocation,
+        route_id: chosenRoute,
+        event_id: chosenEvent,
+        user_id: 1
+      });
     });
     alert("Success!");
   };
@@ -51,6 +58,48 @@ const EntryForm = (props) => {
         <h1 className="event_header">New Entry Form</h1>
         <form className="event_form" onSubmit={handleSubmit}>
           <Grid container spacing={3}>
+            <Grid item xs={12} md={3}>
+              <InputLabel>Select Event:</InputLabel>
+              <Select
+                id="event_id"
+                native
+                onChange={handleChosenEventChange}
+                fullWidth
+                required
+                value={chosenEvent}
+              >
+                {events ? (
+                  events.map((event) => (
+                    <option key={event.id} value={parseInt(event.id)}>
+                      {event.name}
+                    </option>
+                  ))
+                ) : (
+                  <></>
+                )}
+              </Select>
+            </Grid>
+            <Grid item xs={12} md={3}>
+              <InputLabel>Select Location:</InputLabel>
+              <Select
+                id="location_id"
+                native
+                onChange={handleChosenLocationChange}
+                fullWidth
+                required
+                value={chosenLocation}
+              >
+                {locations ? (
+                  locations.map((location) => (
+                    <option key={location.id} value={parseInt(location.id)}>
+                      {location.name}
+                    </option>
+                  ))
+                ) : (
+                  <></>
+                )}
+              </Select>
+            </Grid>
             <Grid item xs={12} md={3}>
               <InputLabel htmlFor="age-native-simple">
                 Attendee Count:{" "}
@@ -72,48 +121,6 @@ const EntryForm = (props) => {
                 fullWidth
                 onChange={handleEntryChange}
               />
-            </Grid>
-            <Grid item xs={12} md={3}>
-              <InputLabel htmlFor="age-native-simple">Event: </InputLabel>
-              <Select
-                id="event_id"
-                native
-                onChange={handleChosenEventChange}
-                fullWidth
-                required
-                value={chosenEvent}
-              >
-                {events ? (
-                  events.map((event) => (
-                    <option key={event.id} value={parseInt(event.id)}>
-                      {event.name}
-                    </option>
-                  ))
-                ) : (
-                  <></>
-                )}
-              </Select>
-            </Grid>
-            <Grid item xs={12} md={3}>
-              <InputLabel htmlFor="age-native-simple">Location: </InputLabel>
-              <Select
-                id="location_id"
-                native
-                onChange={handleChosenLocationChange}
-                fullWidth
-                required
-                value={chosenLocation}
-              >
-                {locations ? (
-                  locations.map((location) => (
-                    <option key={location.id} value={parseInt(location.id)}>
-                      {location.name}
-                    </option>
-                  ))
-                ) : (
-                  <></>
-                )}
-              </Select>
             </Grid>
           </Grid>
           <Grid>

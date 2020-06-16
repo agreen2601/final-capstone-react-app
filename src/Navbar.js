@@ -1,15 +1,5 @@
 import React from "react";
-import {
-  Navbar
-//   NavbarToggler,
-//   NavbarBrand,
-//   Nav,
-//   NavItem,
-//   UncontrolledDropdown,
-//   DropdownToggle,
-//   DropdownMenu,
-//   DropdownItem,
-} from "reactstrap";
+import { Navbar } from "reactstrap";
 import { Link } from "react-router-dom";
 
 const Nav_Bar = (props) => {
@@ -17,7 +7,8 @@ const Nav_Bar = (props) => {
     <>
       <Navbar>
         <Link to="/entry/form">Entry Form</Link>{" "}
-        <Link to="/location/log">Location Logs</Link>
+        <Link to="/location/log">Location Logs</Link>{" "}
+        <Link to="/route/report">Route Report</Link>
       </Navbar>
     </>
   );

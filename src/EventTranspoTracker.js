@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, useHistory, Route } from "react-router-dom";
 import Nav_Bar from "./Navbar";
 import EntryForm from "./forms/EntryForm";
-import LocationLog from "./LocationLog";
 import apiManager from "./api/apiManager";
+import RouteReport from "./reports/RouteReport";
+import LocationLog from "./logs/LocationLog";
 
 const EventTranspoTracker = () => {
   let history = useHistory();
@@ -27,9 +28,11 @@ const EventTranspoTracker = () => {
   // chosenEvent is the choice made from the dropdown
   const [locations, setLocations] = useState([]);
   const [events, setEvents] = useState([]);
+  const [entries, setEntries] = useState([]);
   const [chosenLocation, setChosenLocation] = useState(1);
   const [chosenRoute, setChosenRoute] = useState("");
   const [chosenEvent, setChosenEvent] = useState(1);
+  const [chosenDate, setChosenDate] = useState(1);
 
   // get and sort in alpha order all locations for the dropdown menus and pass them to the form and the log
   const getLocations = () => {
@@ -66,10 +69,27 @@ const EventTranspoTracker = () => {
     setChosenEvent(eventId);
   };
 
+  // get and sort in chronological order all dates for the dropdown menus
+  const getEntries = () => {
+    apiManager.getAllEntries().then((r) => {
+      setEntries(r);
+    });
+  };
+
+  const uniqueDates = [...new Set(entries.map(entry => entry.date))]
+  console.log("unique dates", uniqueDates)
+
+  // set chosenDate based on choice from dropdown menu
+  const handleChosenDateChange = (e) => {
+    const dateId = parseInt(e.target.value);
+    setChosenDate(dateId);
+  };
+
   // watch from change in chosenlocation and update chosenroute at the same time
   useEffect(() => {
     getLocations();
     getEvents();
+    getEntries();
     getRouteByLocation(chosenLocation);
   }, [chosenLocation, chosenEvent]);
 
@@ -100,6 +120,22 @@ const EventTranspoTracker = () => {
             locations={locations}
             events={events}
             chosenLocation={chosenLocation}
+            chosenEvent={chosenEvent}
+            handleChosenLocationChange={handleChosenLocationChange}
+            handleChosenEventChange={handleChosenEventChange}
+            {...props}
+          />
+        )}
+      />
+      <Route
+        exact
+        path="/route/report"
+        render={(props) => (
+          <RouteReport
+            locations={locations}
+            events={events}
+            chosenLocation={chosenLocation}
+            chosenRoute={chosenRoute}
             chosenEvent={chosenEvent}
             handleChosenLocationChange={handleChosenLocationChange}
             handleChosenEventChange={handleChosenEventChange}

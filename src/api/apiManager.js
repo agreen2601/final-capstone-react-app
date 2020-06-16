@@ -16,9 +16,6 @@ export default {
   getAllLocations() {
     return fetch(`${baseurl}/locations`).then((r) => r.json());
   },
-  getSingleLocation(locationID) {
-    return fetch(`${baseurl}/locations/${locationID}`).then((r) => r.json())
-  },
   getAllEvents() {
     return fetch(`${baseurl}/events`).then((r) => r.json());
   },
