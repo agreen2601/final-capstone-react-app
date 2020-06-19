@@ -18,9 +18,6 @@ const RouteReport = (props) => {
   const handleChosenDateChange = props.handleChosenDateChange;
   const [entries, setEntries] = useState([]);
 
-  //  get token for authentication
-  let token = window.sessionStorage.getItem("token");
-
   // get entries based on location and event chosen from dropdowns then filter based on date
   const getEntries = (locationId, eventId) => {
     apiManager

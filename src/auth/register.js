@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { Link } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";

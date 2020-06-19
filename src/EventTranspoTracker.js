@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, useHistory, Route, Redirect } from "react-router-dom";
-import Nav_Bar from "./navbar";
+import { BrowserRouter, Route, Redirect } from "react-router-dom";
+import NavBar from "./navbar";
 import EntryForm from "./forms/entryForm";
 import apiManager from "./api/apiManager";
 import RouteReport from "./reports/routeReport";
@@ -11,10 +11,8 @@ import TestLog from "./logs/testLog";
 import moment from "moment";
 
 const EventTranspoTracker = () => {
-  let history = useHistory();
   const isAuthenticated = () => sessionStorage.getItem("token") !== null;
   const [hasUser, setHasUser] = useState(isAuthenticated());
-  const [userInfo, setUserInfo] = useState({});
 
   const setUserToken = (resp) => {
     sessionStorage.setItem("token", resp.token);
@@ -27,9 +25,8 @@ const EventTranspoTracker = () => {
   };
 
   // locations and events are all locations and events to fill the dropdown menus
-  // chosenLocation is the choice made from the dropdown
-  // chosenRoute is dependent upon chosen location (fetch location info with locationId then .route_id)
-  // chosenEvent is the choice made from the dropdown
+  // chosenLocation and chosenEvent are the choices made from the dropdowns
+  // chosenRoute is dependent upon chosen location (fetch location info with locationId then access .route_id)
   const [locations, setLocations] = useState([]);
   const [events, setEvents] = useState([]);
   const [entries, setEntries] = useState([]);
@@ -37,9 +34,6 @@ const EventTranspoTracker = () => {
   const [chosenRoute, setChosenRoute] = useState("");
   const [chosenEvent, setChosenEvent] = useState(1);
   const [chosenDate, setChosenDate] = useState(moment().format("YYYY-MM-DD"));
-
-  //  get token for authentication
-  let token = window.sessionStorage.getItem("token");
 
   // get and sort in alpha order all locations for the dropdown menus and pass them to the form and the log
   const getLocations = () => {
@@ -100,7 +94,7 @@ const EventTranspoTracker = () => {
 
   return (
     <BrowserRouter>
-      <Nav_Bar
+      <NavBar
         navArray={
           hasUser
             ? [

@@ -2,7 +2,7 @@ import React from "react";
 import { Navbar } from "reactstrap";
 import { Link } from "react-router-dom";
 
-const Nav_Bar = (props) => {
+const NavBar = (props) => {
   const hasUser = props.hasUser;
   const clearUser = props.clearUser
 
@@ -20,4 +20,4 @@ const Nav_Bar = (props) => {
   );
 };
 
-export default Nav_Bar;
+export default NavBar;

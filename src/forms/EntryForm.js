@@ -7,7 +7,6 @@ import Select from "@material-ui/core/Select";
 import Typography from "@material-ui/core/Typography";
 import apiManager from "../api/apiManager";
 import moment from "moment";
-import eventTranspoTracker from "../eventTranspoTracker"
 
 // "locations" and "events" fill the dropdowns, both "handle...change"s change the 3 "chosen"s (route dependent upon location work together)
 const EntryForm = (props) => {
@@ -21,7 +20,7 @@ const EntryForm = (props) => {
   const [entry, setEntry] = useState({
     attendee_count: "",
     vehicle_number: "",
-    user_id: 1,
+    // user_id: 1,
     date: moment().format("YYYY-MM-DD"),
     time: moment().format("H:m"),
   });
@@ -51,7 +50,7 @@ const EntryForm = (props) => {
         location_id: chosenLocation,
         route_id: chosenRoute,
         event_id: chosenEvent,
-        user_id: 1,
+        // user_id: 1,
         date: moment().format("YYYY-MM-DD"),
         time: moment().format("H:m"),
       });
@@ -133,7 +132,7 @@ const EntryForm = (props) => {
             </Grid>
           </Grid>
           <Grid>
-            <Button type="submit" color="primary" variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="primary">
               Submit
             </Button>
           </Grid>
