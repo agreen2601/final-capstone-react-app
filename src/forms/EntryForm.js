@@ -4,7 +4,10 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
+import Typography from "@material-ui/core/Typography";
 import apiManager from "../api/apiManager";
+import moment from "moment";
+import eventTranspoTracker from "../eventTranspoTracker"
 
 // "locations" and "events" fill the dropdowns, both "handle...change"s change the 3 "chosen"s (route dependent upon location work together)
 const EntryForm = (props) => {
@@ -19,6 +22,8 @@ const EntryForm = (props) => {
     attendee_count: "",
     vehicle_number: "",
     user_id: 1,
+    date: moment().format("YYYY-MM-DD"),
+    time: moment().format("H:m"),
   });
 
   // set values for entry from state from dropdowns, which carry over from form to log and back without changing until user chooses new
@@ -46,7 +51,9 @@ const EntryForm = (props) => {
         location_id: chosenLocation,
         route_id: chosenRoute,
         event_id: chosenEvent,
-        user_id: 1
+        user_id: 1,
+        date: moment().format("YYYY-MM-DD"),
+        time: moment().format("H:m"),
       });
     });
     alert("Success!");
@@ -55,7 +62,9 @@ const EntryForm = (props) => {
   return (
     <>
       <div className="event-form-page">
-        <h1 className="event_header">New Entry Form</h1>
+        <Typography component="h1" variant="h5">
+          Entry Form
+        </Typography>
         <form className="event_form" onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={3}>
@@ -124,7 +133,9 @@ const EntryForm = (props) => {
             </Grid>
           </Grid>
           <Grid>
-            <Button type="submit">Submit</Button>
+            <Button type="submit" color="primary" variant="contained" color="primary">
+              Submit
+            </Button>
           </Grid>
         </form>
       </div>
