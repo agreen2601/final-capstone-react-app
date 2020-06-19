@@ -2,24 +2,36 @@ import React, { useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
+import Typography from "@material-ui/core/Typography";
 import apiManager from "../api/apiManager";
-import RouteGraph from "./RouteGraph";
+import RouteGraph from "./routeGraph";
 
 const RouteReport = (props) => {
   const locations = props.locations;
   const events = props.events;
+  const dates = props.uniqueDates;
   const chosenLocation = props.chosenLocation;
   const chosenEvent = props.chosenEvent;
+  const chosenDate = props.chosenDate;
   const handleChosenLocationChange = props.handleChosenLocationChange;
   const handleChosenEventChange = props.handleChosenEventChange;
+  const handleChosenDateChange = props.handleChosenDateChange;
   const [entries, setEntries] = useState([]);
 
-  // get entries based on location and event chosen from dropdowns
+  //  get token for authentication
+  let token = window.sessionStorage.getItem("token");
+
+  // get entries based on location and event chosen from dropdowns then filter based on date
   const getEntries = (locationId, eventId) => {
-    apiManager.getEntriesByLocationAndEvent(locationId, eventId).then((r) => {
-      setEntries(r);
-    });
+    apiManager
+      .getEntriesByLocationAndEvent(locationId, eventId)
+      .then((r) => {
+        setEntries(r);
+      });
   };
+  const entriesByDate = entries.filter((entry) =>
+    entry.date.includes(chosenDate)
+  );
 
   useEffect(() => {
     getEntries(props.chosenLocation, props.chosenEvent);
@@ -28,7 +40,9 @@ const RouteReport = (props) => {
   return (
     <>
       <div>
-        <h1 className="event_header">Route Reports</h1>
+        <Typography component="h1" variant="h5">
+          Route Reports
+        </Typography>
         <Grid container spacing={3}>
           <Grid item xs={12} md={3}>
             <InputLabel>Select Event:</InputLabel>
@@ -74,11 +88,36 @@ const RouteReport = (props) => {
               )}
             </Select>
           </Grid>
+          <Grid item xs={12} md={3}>
+            <InputLabel>Select Date:</InputLabel>
+            <Select
+              id="dateId"
+              native
+              onChange={handleChosenDateChange}
+              fullWidth
+              required
+              label="??"
+              value={chosenDate}
+            >
+              <option aria-label="None" value="">
+                Choose Date
+              </option>
+              {dates ? (
+                dates.map((date) => (
+                  <option key={date} value={date}>
+                    {date}
+                  </option>
+                ))
+              ) : (
+                <></>
+              )}
+            </Select>
+          </Grid>
         </Grid>
       </div>
       <div className="location_log_header"></div>
       <div>
-        <RouteGraph entries={entries} {...props} />
+        <RouteGraph entriesByDate={entriesByDate} {...props} />
       </div>
     </>
   );
