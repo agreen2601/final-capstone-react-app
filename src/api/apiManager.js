@@ -34,6 +34,11 @@ export default {
       body: JSON.stringify(newEntry),
     }).then((r) => r.json());
   },
+  deleteEntry(id) {
+    return fetch(`${baseurl}/entries/${id}`, {
+      method: "DELETE",
+    });
+  },
   register(userToPost) {
     return fetch(`${baseurl}/register/`, {
       method: "POST",
