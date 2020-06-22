@@ -1,9 +1,5 @@
 import baseurl from "./baseurl";
 
-//  get token for authentication
-let token = window.sessionStorage.getItem("token");
-// change this into a function everytime i need token, call function
-
 export default {
   getAllEntries() {
     return fetch(`${baseurl}/entries`).then((r) => r.json());
@@ -33,7 +29,7 @@ export default {
       headers: {
         "content-type": "application/json",
         Accept: "application/json",
-        Authorization: `Token ${token}`,
+        Authorization: `Token ${window.sessionStorage.getItem("token")}`,
       },
       body: JSON.stringify(newEntry),
     }).then((r) => r.json());

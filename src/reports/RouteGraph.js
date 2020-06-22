@@ -5,12 +5,19 @@ const RouteGraph = (props) => {
   const entries = props.entriesByDate;
 
   const state = {
-    labels: entries.map(entry => entry.time.slice(0, -3)),
+    labels: entries.map((entry) =>
+    parseFloat(
+      `${entry.time.split(":")[0]}.${
+        (entry.time.split(":")[1] / 60).toString().split(".")[1]
+      }`.slice(0, 5)
+    )
+  ),
     datasets: [
       {
         backgroundColor: "rgba(75,192,192,1)",
         borderColor: "rgba(0,0,0,1)",
-        borderWidth: 2,
+        // borderWidth: 2,
+        barThickness: "flex",
         data: entries.map((entry) => entry.attendee_count),
       },
     ],

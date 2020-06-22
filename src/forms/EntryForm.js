@@ -20,7 +20,6 @@ const EntryForm = (props) => {
   const [entry, setEntry] = useState({
     attendee_count: "",
     vehicle_number: "",
-    // user_id: 1,
     date: moment().format("YYYY-MM-DD"),
     time: moment().format("H:m"),
   });
@@ -40,7 +39,6 @@ const EntryForm = (props) => {
   // post entry, reset attendee count and vehicle number to empty "", provide user "success" alert
   const handleSubmit = (e) => {
     e.preventDefault();
-    // const token = sessionStorage.getItem("token");
     apiManager.postEntry(entry).then(() => {
       document.getElementById("attendee_count").value = "";
       document.getElementById("vehicle_number").value = "";
@@ -50,11 +48,11 @@ const EntryForm = (props) => {
         location_id: chosenLocation,
         route_id: chosenRoute,
         event_id: chosenEvent,
-        // user_id: 1,
         date: moment().format("YYYY-MM-DD"),
         time: moment().format("H:m"),
       });
     });
+    // console.log(response.status)
     alert("Success!");
   };
 

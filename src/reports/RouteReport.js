@@ -5,6 +5,7 @@ import Select from "@material-ui/core/Select";
 import Typography from "@material-ui/core/Typography";
 import apiManager from "../api/apiManager";
 import RouteGraph from "./routeGraph";
+import TestGraph from "./testGraph";
 
 const RouteReport = (props) => {
   const locations = props.locations;
@@ -20,11 +21,9 @@ const RouteReport = (props) => {
 
   // get entries based on location and event chosen from dropdowns then filter based on date
   const getEntries = (locationId, eventId) => {
-    apiManager
-      .getEntriesByLocationAndEvent(locationId, eventId)
-      .then((r) => {
-        setEntries(r);
-      });
+    apiManager.getEntriesByLocationAndEvent(locationId, eventId).then((r) => {
+      setEntries(r);
+    });
   };
   const entriesByDate = entries.filter((entry) =>
     entry.date.includes(chosenDate)
@@ -115,6 +114,7 @@ const RouteReport = (props) => {
       <div className="location_log_header"></div>
       <div>
         <RouteGraph entriesByDate={entriesByDate} {...props} />
+        <TestGraph entriesByDate={entriesByDate} {...props} />
       </div>
     </>
   );

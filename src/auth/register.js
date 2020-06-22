@@ -13,7 +13,7 @@ const Register = (props) => {
     username: "",
     email: "",
     password: "",
-    firstName: null,
+    firstName: "",
     lastName: "",
   });
 
@@ -52,7 +52,7 @@ const Register = (props) => {
       .then((resp) => {
         if ("token" in resp) {
           props.setUserToken(resp);
-          props.history.push("/");
+          props.history.push("/entry/form");
         }
       })
       // With a 500 HTTP error, no response is given,
