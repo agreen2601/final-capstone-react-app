@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Redirect } from "react-router-dom";
 import NavBar from "./navbar";
 import EntryForm from "./forms/entryForm";
+import EntryEditForm from "./forms/entryEditForm"
 import apiManager from "./api/apiManager";
 import RouteReport from "./reports/routeReport";
 import LocationLog from "./logs/locationLog";
@@ -16,6 +17,7 @@ const EventTranspoTracker = () => {
 
   const setUserToken = (resp) => {
     sessionStorage.setItem("token", resp.token);
+    sessionStorage.setItem("userID", resp.user_id);
     setHasUser(isAuthenticated());
   };
 
@@ -123,6 +125,33 @@ const EventTranspoTracker = () => {
         render={(props) =>
           hasUser ? (
             <EntryForm
+              hasUser={hasUser}
+              clearUser={clearUser}
+              locations={locations}
+              events={events}
+              entries={entries}
+              uniqueDates={uniqueDates}
+              chosenLocation={chosenLocation}
+              chosenRoute={chosenRoute}
+              chosenEvent={chosenEvent}
+              chosenDate={chosenDate}
+              getEntries={getEntries}
+              handleChosenLocationChange={handleChosenLocationChange}
+              handleChosenEventChange={handleChosenEventChange}
+              handleChosenDateChange={handleChosenDateChange}
+              {...props}
+            />
+          ) : (
+            <Redirect to="/login" />
+          )
+        }
+      />
+      <Route
+        exact
+        path="/entry/edit/form/:entryId(\d+)"
+        render={(props) =>
+          hasUser ? (
+            <EntryEditForm
               hasUser={hasUser}
               clearUser={clearUser}
               locations={locations}

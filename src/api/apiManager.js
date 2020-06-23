@@ -4,6 +4,9 @@ export default {
   getAllEntries() {
     return fetch(`${baseurl}/entries`).then((r) => r.json());
   },
+  getSingleEntry(entryId) {
+    return fetch(`${baseurl}/entries/${entryId}`).then((r) => r.json());
+  },
   getSingleLocation(locationId) {
     return fetch(`${baseurl}/locations/${locationId}`).then((r) => r.json());
   },
@@ -33,6 +36,17 @@ export default {
       },
       body: JSON.stringify(newEntry),
     }).then((r) => r.json());
+  },
+  updateEntry(entry) {
+    return fetch(`${baseurl}/entries/${entry.id}`, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+        Accept: "application/json",
+        Authorization: `Token ${window.sessionStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(entry),
+    });
   },
   deleteEntry(id) {
     return fetch(`${baseurl}/entries/${id}`, {

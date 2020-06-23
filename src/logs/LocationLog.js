@@ -31,11 +31,9 @@ const LocationLog = (props) => {
 
   // get entries based on location and event chosen from dropdowns then filter based on date
   const getEntries = (locationId, eventId) => {
-    apiManager
-      .getEntriesByLocationAndEvent(locationId, eventId)
-      .then((r) => {
-        setEntries(r);
-      });
+    apiManager.getEntriesByLocationAndEvent(locationId, eventId).then((r) => {
+      setEntries(r);
+    });
   };
   const entriesByDate = entries.filter((entry) =>
     entry.date.includes(chosenDate)
@@ -47,6 +45,12 @@ const LocationLog = (props) => {
       .map((entry) => entry.attendee_count)
       .reduce((accumulator, runningTotal) => accumulator + runningTotal);
   }
+
+  const deleteThisEntry = (id, locationId, eventId) => {
+    apiManager.deleteEntry(id).then(() => {
+      getEntries(props.chosenLocation, props.chosenEvent);
+    });
+  };
 
   useEffect(() => {
     getEntries(props.chosenLocation, props.chosenEvent);
@@ -158,7 +162,12 @@ const LocationLog = (props) => {
       <div className="location_log_header"></div>
       <div>
         {entriesByDate.map((entry) => (
-          <EntryCard key={entry.id} entry={entry} {...props} />
+          <EntryCard
+            key={entry.id}
+            entry={entry}
+            deleteThisEntry={deleteThisEntry}
+            {...props}
+          />
         ))}
       </div>
     </>

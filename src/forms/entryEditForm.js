@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -6,29 +6,31 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import Typography from "@material-ui/core/Typography";
 import apiManager from "../api/apiManager";
-import moment from "moment";
 
 // "locations" and "events" fill the dropdowns, both "handle...change"s change the 3 "chosen"s (route dependent upon location work together)
-const EntryForm = (props) => {
-  const locations = props.locations;
+const EntryEditForm = (props) => {
   const events = props.events;
+  const locations = props.locations;
   const chosenLocation = props.chosenLocation;
   const chosenRoute = props.chosenRoute;
   const chosenEvent = props.chosenEvent;
   const chosenDate = props.chosenDate;
-  const handleChosenLocationChange = props.handleChosenLocationChange;
   const handleChosenEventChange = props.handleChosenEventChange;
+  const handleChosenLocationChange = props.handleChosenLocationChange;
   const handleChosenDateChange = props.handleChosenDateChange
   const [entry, setEntry] = useState({
+    event_id: "",
+    location_id: "",
     attendee_count: "",
     vehicle_number: "",
+    time: "",
   });
 
   // set values for entry from state from dropdowns, which carry over from form to log and back without changing until user chooses new
-  entry.location_id = chosenLocation;
-  entry.route_id = chosenRoute;
-  entry.event_id = chosenEvent;
-  entry.date = chosenDate;
+    entry.location_id = chosenLocation;
+    entry.route_id = chosenRoute;
+    entry.event_id = chosenEvent;
+    entry.date = chosenDate;
 
   // update state of entry upon form field change
   const handleEntryChange = (e) => {
@@ -37,29 +39,36 @@ const EntryForm = (props) => {
     setEntry(stateToChange);
   };
 
-  // post entry, reset attendee count and vehicle number to empty "", provide user "success" alert
+  useEffect(() => {
+    apiManager.getSingleEntry(props.match.params.entryId).then((entry) => {
+      setEntry(entry);
+    });
+  });
+
+  const editedEntry = {
+    id: props.match.params.entryId,
+    event_id: chosenEvent,
+    location_id: chosenLocation,
+    route_id: chosenRoute,
+    date: chosenDate,
+    attendee_count: entry.attendee_count,
+    vehicle_number: entry.vehicle_number,
+    time: entry.time,
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    entry.date = moment().format("YYYY-MM-DD");
-    entry.time = moment().format("H:m");
-    setTimeout(() => {
-      apiManager.postEntry(entry).then(() => {
-        document.getElementById("attendee_count").value = "";
-        document.getElementById("vehicle_number").value = "";
-        setEntry({
-          attendee_count: "",
-          vehicle_number: "",
-        });
-      });
-    }, 100);
-    alert("Success!");
+    console.log(editedEntry)
+    apiManager.updateEntry(editedEntry).then(() => {
+      props.history.push("/location/log");
+    });
   };
 
   return (
     <>
       <div className="event-form-page">
         <Typography component="h1" variant="h5">
-          Entry Form
+          Edit Entry
         </Typography>
         <form className="event_form" onSubmit={handleSubmit}>
           <Grid container spacing={3}>
@@ -71,11 +80,11 @@ const EntryForm = (props) => {
                 onChange={handleChosenEventChange}
                 fullWidth
                 required
-                value={chosenEvent}
+                value={entry.event_id}
               >
                 {events ? (
                   events.map((event) => (
-                    <option key={event.id} value={parseInt(event.id)}>
+                    <option key={event.id} value={event.id}>
                       {event.name}
                     </option>
                   ))
@@ -92,7 +101,7 @@ const EntryForm = (props) => {
                 onChange={handleChosenLocationChange}
                 fullWidth
                 required
-                value={chosenLocation}
+                value={entry.location_id}
               >
                 {locations ? (
                   locations.map((location) => (
@@ -106,6 +115,26 @@ const EntryForm = (props) => {
               </Select>
             </Grid>
             <Grid item xs={12} md={3}>
+              <InputLabel htmlFor="age-native-simple">Date: </InputLabel>
+              <TextField
+                id="date"
+                type="date"
+                fullWidth
+                value={entry.date}
+                onChange={handleChosenDateChange}
+              />
+            </Grid>
+            <Grid item xs={12} md={3}>
+              <InputLabel htmlFor="age-native-simple">Time: </InputLabel>
+              <TextField
+                id="time"
+                type="time"
+                fullWidth
+                value={entry.time}
+                onChange={handleEntryChange}
+              />
+            </Grid>
+            <Grid item xs={12} md={3}>
               <InputLabel htmlFor="age-native-simple">
                 Attendee Count:{" "}
               </InputLabel>
@@ -115,6 +144,7 @@ const EntryForm = (props) => {
                 id="attendee_count"
                 fullWidth
                 onChange={handleEntryChange}
+                value={entry.attendee_count}
               />
             </Grid>
             <Grid item xs={12} md={3}>
@@ -124,40 +154,20 @@ const EntryForm = (props) => {
               <TextField
                 id="vehicle_number"
                 fullWidth
+                value={entry.vehicle_number}
                 onChange={handleEntryChange}
               />
             </Grid>
           </Grid>
-          <Button type="submit" variant="contained" color="primary">
-            Submit
-          </Button>
-          {/* <Typography component="h1" variant="h6">
-          Not Live? Only edit the date and time below if it is NOT live.
-        </Typography>
-          <Grid item xs={12} md={3}>
-            <InputLabel htmlFor="age-native-simple">Date: </InputLabel>
-            <TextField
-              id="date"
-              type="date"
-              fullWidth
-              value={chosenDate}
-              onChange={handleChosenDateChange}
-            />
+          <Grid>
+            <Button type="submit" variant="contained" color="primary">
+              Submit
+            </Button>
           </Grid>
-          <Grid item xs={12} md={3}>
-            <InputLabel htmlFor="age-native-simple">Time: </InputLabel>
-            <TextField
-              id="time"
-              type="time"
-              fullWidth
-              // value={moment().format("H:m")}
-              onChange={handleEntryChange}
-            />
-          </Grid> */}
         </form>
       </div>
     </>
   );
 };
 
-export default EntryForm;
+export default EntryEditForm;
