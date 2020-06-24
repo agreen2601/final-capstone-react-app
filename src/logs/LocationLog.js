@@ -50,7 +50,7 @@ const LocationLog = (props) => {
     const check = window.confirm(
       "Are you sure you want to delete this entry? Deletion cannot be undone."
     );
-    if (check == true) {
+    if (check === true) {
       apiManager.deleteEntry(id).then(() => {
         getEntries(props.chosenLocation, props.chosenEvent);
       });
@@ -155,7 +155,7 @@ const LocationLog = (props) => {
               value={chosenDate}
             >
               <option aria-label="None" value="">
-                Choose Date
+                All Dates
               </option>
               {dates ? (
                 dates.map((date) => (

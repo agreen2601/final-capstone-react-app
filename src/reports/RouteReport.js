@@ -96,7 +96,7 @@ const RouteReport = (props) => {
               value={chosenDate}
             >
               <option aria-label="None" value="">
-                Choose Date
+                All Dates
               </option>
               {dates ? (
                 dates.map((date) => (

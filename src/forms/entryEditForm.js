@@ -6,6 +6,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import Typography from "@material-ui/core/Typography";
 import apiManager from "../api/apiManager";
+import moment from "moment";
 
 // "locations" and "events" fill the dropdowns, both "handle...change"s change the 3 "chosen"s (route dependent upon location work together)
 const EntryEditForm = (props) => {
@@ -14,15 +15,16 @@ const EntryEditForm = (props) => {
   const chosenLocation = props.chosenLocation;
   const chosenRoute = props.chosenRoute;
   const chosenEvent = props.chosenEvent;
-  const chosenDate = props.chosenDate;
+  // const chosenDate = props.chosenDate;
   const handleChosenEventChange = props.handleChosenEventChange;
   const handleChosenLocationChange = props.handleChosenLocationChange;
-  const handleChosenDateChange = props.handleChosenDateChange
+  // const handleChosenDateChange = props.handleChosenDateChange
   const [entry, setEntry] = useState({
     event_id: "",
     location_id: "",
     attendee_count: "",
     vehicle_number: "",
+    date: "",
     time: "",
   });
 
@@ -30,7 +32,7 @@ const EntryEditForm = (props) => {
     entry.location_id = chosenLocation;
     entry.route_id = chosenRoute;
     entry.event_id = chosenEvent;
-    entry.date = chosenDate;
+    // entry.date = chosenDate;
 
   // update state of entry upon form field change
   const handleEntryChange = (e) => {
@@ -50,7 +52,7 @@ const EntryEditForm = (props) => {
     event_id: chosenEvent,
     location_id: chosenLocation,
     route_id: chosenRoute,
-    date: chosenDate,
+    date: entry.date,
     attendee_count: entry.attendee_count,
     vehicle_number: entry.vehicle_number,
     time: entry.time,
@@ -120,7 +122,7 @@ const EntryEditForm = (props) => {
                 type="date"
                 fullWidth
                 value={entry.date}
-                onChange={handleChosenDateChange}
+                onChange={handleEntryChange}
               />
             </Grid>
             <Grid item xs={12} md={3}>

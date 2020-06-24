@@ -8,7 +8,6 @@ import RouteReport from "./reports/routeReport";
 import LocationLog from "./logs/locationLog";
 import Login from "./auth/login";
 import Register from "./auth/register";
-// import TestLog from "./logs/testLog";
 import moment from "moment";
 
 const EventTranspoTracker = () => {
@@ -66,7 +65,7 @@ const EventTranspoTracker = () => {
     setChosenRoute(routeId);
   };
 
-  // set chosenRoute based on chosenLocation and pass it down to the form
+  // set chosenRoute based on chosenLocation
   const getRouteByLocation = (locationId) => {
     apiManager.getSingleType("locations", locationId).then((r) => {
       setChosenRoute(r.route_id);
