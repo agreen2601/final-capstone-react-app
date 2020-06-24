@@ -15,7 +15,7 @@ const EntryForm = (props) => {
   const locations = props.locations;
   const events = props.events;
   const chosenLocation = props.chosenLocation;
-  const chosenRoute = props.chosenRoute;
+  // const chosenRoute = props.chosenRoute;
   const chosenEvent = props.chosenEvent;
   const chosenDate = props.chosenDate;
   const handleChosenLocationChange = props.handleChosenLocationChange;
@@ -28,8 +28,8 @@ const EntryForm = (props) => {
   });
 
   // set values for entry from state from dropdowns, which carry over from form to log and back without changing until user chooses new
-  entry.location_id = chosenLocation;
-  entry.route_id = chosenRoute;
+  entry.place_id = chosenLocation;
+  // entry.route_id = chosenRoute;
   entry.event_id = chosenEvent;
   entry.date = chosenDate;
 
@@ -63,7 +63,6 @@ const EntryForm = (props) => {
           vehicle_number: "",
           time: moment().format("H:m"),
         });
-        console.log(r)
       });
     }, 100);
     alert("Success!");
@@ -87,6 +86,9 @@ const EntryForm = (props) => {
                 required
                 value={chosenEvent}
               >
+                <option aria-label="None" value="">
+                  Choose Event
+                </option>
                 {events ? (
                   events.map((event) => (
                     <option key={event.id} value={parseInt(event.id)}>
@@ -101,17 +103,20 @@ const EntryForm = (props) => {
             <Grid item xs={12} md={3}>
               <InputLabel>Location:</InputLabel>
               <Select
-                id="location_id"
+                id="place_id"
                 native
                 onChange={handleChosenLocationChange}
                 fullWidth
                 required
                 value={chosenLocation}
               >
+                <option aria-label="None" value="">
+                  Choose Locations
+                </option>
                 {locations ? (
-                  locations.map((location) => (
-                    <option key={location.id} value={parseInt(location.id)}>
-                      {location.name}
+                  locations.map((place) => (
+                    <option key={place.id} value={parseInt(place.id)}>
+                      {place.name}
                     </option>
                   ))
                 ) : (

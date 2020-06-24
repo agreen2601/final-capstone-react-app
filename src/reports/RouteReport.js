@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Grid from "@material-ui/core/Grid";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import Typography from "@material-ui/core/Typography";
-import apiManager from "../api/apiManager";
 import RouteGraph from "./routeGraph";
 import TestGraph from "./testGraph";
 
@@ -17,21 +16,17 @@ const RouteReport = (props) => {
   const handleChosenLocationChange = props.handleChosenLocationChange;
   const handleChosenEventChange = props.handleChosenEventChange;
   const handleChosenDateChange = props.handleChosenDateChange;
-  const [entries, setEntries] = useState([]);
+  const allEntries = props.entries;
 
   // get entries based on location and event chosen from dropdowns then filter based on date
-  const getEntries = (locationId, eventId) => {
-    apiManager.getEntriesByLocationAndEvent(locationId, eventId).then((r) => {
-      setEntries(r);
-    });
-  };
-  const entriesByDate = entries
-    .filter((entry) => entry.date.includes(chosenDate))
-    .sort((a, b) => a.time.localeCompare(b.time));
-
-  useEffect(() => {
-    getEntries(props.chosenLocation, props.chosenEvent);
-  }, [props.chosenLocation, props.chosenEvent]);
+  const filteredEntries = allEntries
+    .filter((each) => each.event_id.toString().includes(chosenEvent))
+    .filter((eachRemaining) =>
+      eachRemaining.place_id.toString().includes(chosenLocation)
+    )
+    .filter((eachStillRemaining) =>
+      eachStillRemaining.date.includes(chosenDate)
+    );
 
   return (
     <>
@@ -51,6 +46,9 @@ const RouteReport = (props) => {
               label="??"
               value={chosenEvent}
             >
+              <option aria-label="None" value="">
+                All Events
+              </option>
               {events ? (
                 events.map((event) => (
                   <option key={event.id} value={parseInt(event.id)}>
@@ -65,7 +63,7 @@ const RouteReport = (props) => {
           <Grid item xs={12} md={3}>
             <InputLabel>Location:</InputLabel>
             <Select
-              id="locationId"
+              id="placeId"
               native
               onChange={handleChosenLocationChange}
               fullWidth
@@ -73,10 +71,13 @@ const RouteReport = (props) => {
               label="??"
               value={chosenLocation}
             >
+              <option aria-label="None" value="">
+                All Locations
+              </option>
               {locations ? (
-                locations.map((location) => (
-                  <option key={location.id} value={parseInt(location.id)}>
-                    {location.name}
+                locations.map((place) => (
+                  <option key={place.id} value={parseInt(place.id)}>
+                    {place.name}
                   </option>
                 ))
               ) : (
@@ -113,8 +114,8 @@ const RouteReport = (props) => {
       </div>
       <div className="location_log_header"></div>
       <div>
-        <RouteGraph entriesByDate={entriesByDate} {...props} />
-        <TestGraph entriesByDate={entriesByDate} {...props} />
+        <RouteGraph filteredEntries={filteredEntries} {...props} />
+        <TestGraph filteredEntries={filteredEntries} {...props} />
       </div>
     </>
   );

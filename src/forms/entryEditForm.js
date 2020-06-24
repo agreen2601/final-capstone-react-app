@@ -6,14 +6,13 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import Typography from "@material-ui/core/Typography";
 import apiManager from "../api/apiManager";
-import moment from "moment";
 
 // "locations" and "events" fill the dropdowns, both "handle...change"s change the 3 "chosen"s (route dependent upon location work together)
 const EntryEditForm = (props) => {
   const events = props.events;
   const locations = props.locations;
   const chosenLocation = props.chosenLocation;
-  const chosenRoute = props.chosenRoute;
+  // const chosenRoute = props.chosenRoute;
   const chosenEvent = props.chosenEvent;
   // const chosenDate = props.chosenDate;
   const handleChosenEventChange = props.handleChosenEventChange;
@@ -21,7 +20,7 @@ const EntryEditForm = (props) => {
   // const handleChosenDateChange = props.handleChosenDateChange
   const [entry, setEntry] = useState({
     event_id: "",
-    location_id: "",
+    place_id: "",
     attendee_count: "",
     vehicle_number: "",
     date: "",
@@ -29,8 +28,8 @@ const EntryEditForm = (props) => {
   });
 
   // set values for entry from state from dropdowns, which carry over from form to log and back without changing until user chooses new
-    entry.location_id = chosenLocation;
-    entry.route_id = chosenRoute;
+    entry.place_id = chosenLocation;
+    // entry.route_id = chosenRoute;
     entry.event_id = chosenEvent;
     // entry.date = chosenDate;
 
@@ -50,8 +49,8 @@ const EntryEditForm = (props) => {
   const editedEntry = {
     id: props.match.params.entryId,
     event_id: chosenEvent,
-    location_id: chosenLocation,
-    route_id: chosenRoute,
+    place_id: chosenLocation,
+    // route_id: chosenRoute,
     date: entry.date,
     attendee_count: entry.attendee_count,
     vehicle_number: entry.vehicle_number,
@@ -97,17 +96,17 @@ const EntryEditForm = (props) => {
             <Grid item xs={12} md={3}>
               <InputLabel>Location:</InputLabel>
               <Select
-                id="location_id"
+                id="place_id"
                 native
                 onChange={handleChosenLocationChange}
                 fullWidth
                 required
-                value={entry.location_id}
+                value={entry.place_id}
               >
                 {locations ? (
-                  locations.map((location) => (
-                    <option key={location.id} value={parseInt(location.id)}>
-                      {location.name}
+                  locations.map((place) => (
+                    <option key={place.id} value={parseInt(place.id)}>
+                      {place.name}
                     </option>
                   ))
                 ) : (

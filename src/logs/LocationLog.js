@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
@@ -16,32 +16,35 @@ import apiManager from "../api/apiManager";
 
 const LocationLog = (props) => {
   const locations = props.locations;
-  // const routes = props.routes;
+  const routes = props.routes;
   const events = props.events;
   const dates = props.uniqueDates;
   const chosenLocation = props.chosenLocation;
-  // const chosenRoute = props.chosenRoute;
+  const chosenRoute = props.chosenRoute;
   const chosenEvent = props.chosenEvent;
   const chosenDate = props.chosenDate;
   const handleChosenLocationChange = props.handleChosenLocationChange;
-  // const handleChosenRouteChange = props.handleChosenRouteChange;
+  const handleChosenRouteChange = props.handleChosenRouteChange;
   const handleChosenEventChange = props.handleChosenEventChange;
   const handleChosenDateChange = props.handleChosenDateChange;
-  const [entries, setEntries] = useState([]);
+  const allEntries = props.entries;
+  const getEntries = props.getEntries;
 
-  // get entries based on location and event chosen from dropdowns, filter by date, then sort by time
-  const getEntries = (locationId, eventId) => {
-    apiManager.getEntriesByLocationAndEvent(locationId, eventId).then((r) => {
-      setEntries(r);
-    });
-  };
-  const entriesByDate = entries
-    .filter((entry) => entry.date.includes(chosenDate))
-    .sort((a, b) => a.time.localeCompare(b.time));
+  const filteredEntries = allEntries
+    .filter((each) => each.event_id.toString().includes(chosenEvent))
+    .filter((each2) =>
+      each2.place_id.toString().includes(chosenLocation)
+    )
+    .filter((each3) =>
+      each3.place.route.name.includes(chosenRoute)
+    )
+    .filter((each4) =>
+      each4.date.includes(chosenDate)
+    );
 
   let totalAttendeeCount = 0;
-  if (entriesByDate.length !== 0) {
-    totalAttendeeCount = entriesByDate
+  if (filteredEntries.length !== 0) {
+    totalAttendeeCount = filteredEntries
       .map((entry) => entry.attendee_count)
       .reduce((accumulator, runningTotal) => accumulator + runningTotal);
   }
@@ -52,27 +55,14 @@ const LocationLog = (props) => {
     );
     if (check === true) {
       apiManager.deleteEntry(id).then(() => {
-        getEntries(props.chosenLocation, props.chosenEvent);
+        getEntries();
       });
     }
   };
 
   useEffect(() => {
-    getEntries(props.chosenLocation, props.chosenEvent);
-  }, [props.chosenLocation, props.chosenEvent]);
-
-  let routeName = "";
-  let routeDescription = "";
-  let routeColor = "";
-  if (entries.length !== 0) {
-    routeName = entries[0].location.route.name;
-    routeDescription = entries[0].location.route.description;
-    routeColor = entries[0].location.route.color;
-  }
-
-  const routeStyle = {
-    color: routeColor,
-  };
+    getEntries();
+  }, []);
 
   return (
     <>
@@ -91,6 +81,9 @@ const LocationLog = (props) => {
               required
               value={chosenEvent}
             >
+              <option aria-label="None" value="">
+                All Events
+              </option>
               {events ? (
                 events.map((event) => (
                   <option key={event.id} value={parseInt(event.id)}>
@@ -105,17 +98,20 @@ const LocationLog = (props) => {
           <Grid item xs={12} md={3}>
             <InputLabel>Location:</InputLabel>
             <Select
-              id="locationId"
+              id="placeId"
               native
               onChange={handleChosenLocationChange}
               fullWidth
               required
               value={chosenLocation}
             >
+              <option aria-label="None" value="">
+                All Locations
+              </option>
               {locations ? (
-                locations.map((location) => (
-                  <option key={location.id} value={parseInt(location.id)}>
-                    {location.name}
+                locations.map((place) => (
+                  <option key={place.id} value={parseInt(place.id)}>
+                    {place.name}
                   </option>
                 ))
               ) : (
@@ -123,7 +119,7 @@ const LocationLog = (props) => {
               )}
             </Select>
           </Grid>
-          {/* <Grid item xs={12} md={3}>
+          <Grid item xs={12} md={3}>
             <InputLabel>Route:</InputLabel>
             <Select
               id="routeId"
@@ -133,17 +129,20 @@ const LocationLog = (props) => {
               required
               value={chosenRoute}
             >
+              <option aria-label="None" value="">
+                All Routes
+              </option>
               {routes ? (
                 routes.map((route) => (
-                  <option key={route.id} value={parseInt(route.id)}>
-                    {route.name}
+                  <option key={route.id} value={route.name}>
+                    {route.name} {route.description}
                   </option>
                 ))
               ) : (
                 <></>
               )}
             </Select>
-          </Grid> */}
+          </Grid>
           <Grid item xs={12} md={3}>
             <InputLabel>Date:</InputLabel>
             <Select
@@ -170,11 +169,8 @@ const LocationLog = (props) => {
           </Grid>
         </Grid>
       </div>
-      <div style={routeStyle}>
-        Route {routeName} {routeDescription}
-      </div>
       <Typography variant="h6">
-        {totalAttendeeCount} attendees moved in {entriesByDate.length} trips.
+        {totalAttendeeCount} attendees moved in {filteredEntries.length} trips.
       </Typography>
       <TableContainer component={Paper}>
         <Table size="small" aria-label="a dense table">
@@ -188,7 +184,7 @@ const LocationLog = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {entriesByDate.map((entry) => (
+            {filteredEntries.map((entry) => (
               <TableRow key={entry.id}>
                 <TableCell component="th" scope="entry">
                   {entry.time.slice(0, -3)}
@@ -199,7 +195,7 @@ const LocationLog = (props) => {
                   {entry.user.first_name} {entry.user.last_name}
                 </TableCell>
                 <TableCell align="right">
-                  {window.sessionStorage.getItem("userID") == entry.user_id ? (
+                  {parseInt(window.sessionStorage.getItem("userID")) === entry.user_id ? (
                     <>
                       <EditIcon
                         onClick={() =>

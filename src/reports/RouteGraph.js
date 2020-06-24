@@ -2,7 +2,7 @@ import React from "react";
 import { Bar } from "react-chartjs-2";
 
 const RouteGraph = (props) => {
-  const entries = props.entriesByDate;
+  const entries = props.filteredEntries;
 
   const state = {
     labels: entries.map((entry) =>

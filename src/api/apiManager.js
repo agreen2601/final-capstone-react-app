@@ -7,16 +7,6 @@ export default {
   getSingleType(type, id) {
     return fetch(`${baseurl}/${type}/${id}`).then((r) => r.json());
   },
-  getEntriesByLocation(locationId) {
-    return fetch(`${baseurl}/entries?locationID=${locationId}`).then((r) =>
-      r.json()
-    );
-  },
-  getEntriesByLocationAndEvent(locationId, eventID) {
-    return fetch(
-      `${baseurl}/entries?locationID=${locationId}&eventID=${eventID}`
-    ).then((r) => r.json());
-  },
   postEntry(newEntry) {
     return fetch(`${baseurl}/entries`, {
       method: "POST",

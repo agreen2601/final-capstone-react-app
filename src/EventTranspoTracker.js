@@ -39,7 +39,7 @@ const EventTranspoTracker = () => {
 
   // get and sort in alpha order all locations for the dropdown menus and pass them to the form and the log
   const getLocations = () => {
-    apiManager.getAllType("locations").then((r) => {
+    apiManager.getAllType("places").then((r) => {
       r.sort((a, b) => a.name.localeCompare(b.name));
       setLocations(r);
     });
@@ -47,11 +47,12 @@ const EventTranspoTracker = () => {
 
   // set choseLocation based on choice from dropdown menu on form and log
   const handleChosenLocationChange = (e) => {
-    const locationId = parseInt(e.target.value);
-    setChosenLocation(locationId);
+    const placeId = e.target.value;
+    setChosenLocation(placeId);
+    setChosenRoute("");
   };
 
-  // get and sort in alpha order all routes for the dropdown menus and pass them to the form and the log
+  // // get and sort in alpha order all routes for the dropdown menus and pass them to the form and the log
   const getRoutes = () => {
     apiManager.getAllType("routes").then((r) => {
       r.sort((a, b) => a.name.localeCompare(b.name));
@@ -59,17 +60,11 @@ const EventTranspoTracker = () => {
     });
   };
 
-  // set choseroute based on choice from dropdown menu on form and log
+  // // set choseroute based on choice from dropdown menu on form and log
   const handleChosenRouteChange = (e) => {
-    const routeId = parseInt(e.target.value);
+    const routeId = e.target.value;
     setChosenRoute(routeId);
-  };
-
-  // set chosenRoute based on chosenLocation
-  const getRouteByLocation = (locationId) => {
-    apiManager.getSingleType("locations", locationId).then((r) => {
-      setChosenRoute(r.route_id);
-    });
+    setChosenLocation("");
   };
 
   // get and sort in alpha order all events for the dropdown menus
@@ -82,7 +77,7 @@ const EventTranspoTracker = () => {
 
   // set chosenEvent based on choice from dropdown menu
   const handleChosenEventChange = (e) => {
-    const eventId = parseInt(e.target.value);
+    const eventId = e.target.value;
     setChosenEvent(eventId);
   };
 
@@ -107,15 +102,11 @@ const EventTranspoTracker = () => {
     getEvents();
     getEntries();
     getRoutes();
-    getRouteByLocation(chosenLocation);
-  }, [chosenLocation]);
+  }, []);
 
   return (
     <BrowserRouter>
-      <NavBar
-        hasUser={hasUser}
-        clearUser={clearUser}
-      />
+      <NavBar hasUser={hasUser} clearUser={clearUser} />
       <Route
         exact
         path="/"
@@ -135,11 +126,11 @@ const EventTranspoTracker = () => {
               locations={locations}
               events={events}
               chosenLocation={chosenLocation}
-              chosenRoute={chosenRoute}
+              // chosenRoute={chosenRoute}
               chosenEvent={chosenEvent}
               chosenDate={chosenDate}
               handleChosenLocationChange={handleChosenLocationChange}
-              handleChosenRouteChange={handleChosenRouteChange}
+              // handleChosenRouteChange={handleChosenRouteChange}
               handleChosenEventChange={handleChosenEventChange}
               handleChosenDateChange={handleChosenDateChange}
               {...props}
@@ -158,7 +149,7 @@ const EventTranspoTracker = () => {
               locations={locations}
               events={events}
               chosenLocation={chosenLocation}
-              chosenRoute={chosenRoute}
+              // chosenRoute={chosenRoute}
               chosenEvent={chosenEvent}
               chosenDate={chosenDate}
               handleChosenLocationChange={handleChosenLocationChange}
@@ -177,15 +168,18 @@ const EventTranspoTracker = () => {
         render={(props) =>
           hasUser ? (
             <LocationLog
+              getEntries={getEntries}
               locations={locations}
-              events={events}
               routes={routes}
+              events={events}
+              entries={entries}
               uniqueDates={uniqueDates}
               chosenLocation={chosenLocation}
               chosenRoute={chosenRoute}
               chosenEvent={chosenEvent}
               chosenDate={chosenDate}
               handleChosenLocationChange={handleChosenLocationChange}
+              handleChosenRouteChange={handleChosenRouteChange}
               handleChosenEventChange={handleChosenEventChange}
               handleChosenDateChange={handleChosenDateChange}
               {...props}
@@ -203,9 +197,10 @@ const EventTranspoTracker = () => {
             <RouteReport
               locations={locations}
               events={events}
+              entries={entries}
               uniqueDates={uniqueDates}
               chosenLocation={chosenLocation}
-              chosenRoute={chosenRoute}
+              // chosenRoute={chosenRoute}
               chosenEvent={chosenEvent}
               chosenDate={chosenDate}
               handleChosenLocationChange={handleChosenLocationChange}
