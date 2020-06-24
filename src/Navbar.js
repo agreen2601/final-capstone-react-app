@@ -14,7 +14,7 @@ const NavBar = (props) => {
 
   return (
     <>
-      <Navbar>
+      <Navbar align="right">
         {hasUser ? (
           <Link to="/entry/form">
             <PlaylistAddIcon style={{ fontSize: 30 }} color="action" />
