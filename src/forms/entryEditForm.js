@@ -40,10 +40,10 @@ const EntryEditForm = (props) => {
   };
 
   useEffect(() => {
-    apiManager.getSingleEntry(props.match.params.entryId).then((entry) => {
+    apiManager.getSingleType("entries", props.match.params.entryId).then((entry) => {
       setEntry(entry);
     });
-  });
+  }, [props.match.params.entryId]);
 
   const editedEntry = {
     id: props.match.params.entryId,
@@ -58,7 +58,6 @@ const EntryEditForm = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(editedEntry)
     apiManager.updateEntry(editedEntry).then(() => {
       props.history.push("/location/log");
     });

@@ -5,6 +5,8 @@ import TextField from "@material-ui/core/TextField";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import Typography from "@material-ui/core/Typography";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 import apiManager from "../api/apiManager";
 import moment from "moment";
 
@@ -18,10 +20,11 @@ const EntryForm = (props) => {
   const chosenDate = props.chosenDate;
   const handleChosenLocationChange = props.handleChosenLocationChange;
   const handleChosenEventChange = props.handleChosenEventChange;
-  const handleChosenDateChange = props.handleChosenDateChange
+  const handleChosenDateChange = props.handleChosenDateChange;
   const [entry, setEntry] = useState({
     attendee_count: "",
     vehicle_number: "",
+    time: moment().format("H:m"),
   });
 
   // set values for entry from state from dropdowns, which carry over from form to log and back without changing until user chooses new
@@ -37,19 +40,30 @@ const EntryForm = (props) => {
     setEntry(stateToChange);
   };
 
+  const [isChecked, setIsChecked] = useState(false);
+  const handleIsCheckedChange = () => {
+    setIsChecked(!isChecked);
+  };
+
   // post entry, reset attendee count and vehicle number to empty "", provide user "success" alert
   const handleSubmit = (e) => {
     e.preventDefault();
-    entry.date = moment().format("YYYY-MM-DD");
-    entry.time = moment().format("H:m");
+    if (isChecked === false) {
+      entry.date = moment().format("YYYY-MM-DD");
+      entry.time = moment().format("H:m");
+    } else {
+      entry.date = chosenDate;
+    }
     setTimeout(() => {
-      apiManager.postEntry(entry).then(() => {
+      apiManager.postEntry(entry).then((r) => {
         document.getElementById("attendee_count").value = "";
         document.getElementById("vehicle_number").value = "";
         setEntry({
           attendee_count: "",
           vehicle_number: "",
+          time: moment().format("H:m"),
         });
+        console.log(r)
       });
     }, 100);
     alert("Success!");
@@ -127,33 +141,49 @@ const EntryForm = (props) => {
                 onChange={handleEntryChange}
               />
             </Grid>
+            <Grid item xs={12} md={3}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={isChecked}
+                    onChange={handleIsCheckedChange}
+                    name="checkedA"
+                    color="primary"
+                  />
+                }
+                label="NOT LIVE? Click if not live to input past date and/or time."
+              />
+            </Grid>
+            {isChecked === true ? (
+              <>
+                <Grid item xs={12} md={3}>
+                  <InputLabel htmlFor="age-native-simple">Date: </InputLabel>
+                  <TextField
+                    id="date"
+                    type="date"
+                    fullWidth
+                    value={chosenDate}
+                    onChange={handleChosenDateChange}
+                  />
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <InputLabel htmlFor="age-native-simple">Time: </InputLabel>
+                  <TextField
+                    id="time"
+                    type="time"
+                    fullWidth
+                    value={entry.time}
+                    onChange={handleEntryChange}
+                  />
+                </Grid>
+              </>
+            ) : (
+              <></>
+            )}
           </Grid>
           <Button type="submit" variant="contained" color="primary">
             Submit
           </Button>
-          {/* <Typography component="h1" variant="h6">
-          Not Live? Only edit the date and time below if it is NOT live.
-        </Typography>
-          <Grid item xs={12} md={3}>
-            <InputLabel htmlFor="age-native-simple">Date: </InputLabel>
-            <TextField
-              id="date"
-              type="date"
-              fullWidth
-              value={chosenDate}
-              onChange={handleChosenDateChange}
-            />
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <InputLabel htmlFor="age-native-simple">Time: </InputLabel>
-            <TextField
-              id="time"
-              type="time"
-              fullWidth
-              // value={moment().format("H:m")}
-              onChange={handleEntryChange}
-            />
-          </Grid> */}
         </form>
       </div>
     </>

@@ -7,7 +7,8 @@ const EntryCard = (props) => {
   return (
     <>
       <div>
-        <span>{entry.time.slice(0, -3)} </span>
+      {/* .slice(0, -3) */}
+        <span>{entry.time} </span>
         <span>{entry.vehicle_number} </span>
         <span>{entry.attendee_count} </span>
         <span>

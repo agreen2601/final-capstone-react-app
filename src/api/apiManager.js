@@ -1,14 +1,11 @@
 import baseurl from "./baseurl";
 
 export default {
-  getAllEntries() {
-    return fetch(`${baseurl}/entries`).then((r) => r.json());
+  getAllType(type) {
+    return fetch(`${baseurl}/${type}`).then((r) => r.json());
   },
-  getSingleEntry(entryId) {
-    return fetch(`${baseurl}/entries/${entryId}`).then((r) => r.json());
-  },
-  getSingleLocation(locationId) {
-    return fetch(`${baseurl}/locations/${locationId}`).then((r) => r.json());
+  getSingleType(type, id) {
+    return fetch(`${baseurl}/${type}/${id}`).then((r) => r.json());
   },
   getEntriesByLocation(locationId) {
     return fetch(`${baseurl}/entries?locationID=${locationId}`).then((r) =>
@@ -19,12 +16,6 @@ export default {
     return fetch(
       `${baseurl}/entries?locationID=${locationId}&eventID=${eventID}`
     ).then((r) => r.json());
-  },
-  getAllLocations() {
-    return fetch(`${baseurl}/locations`).then((r) => r.json());
-  },
-  getAllEvents() {
-    return fetch(`${baseurl}/events`).then((r) => r.json());
   },
   postEntry(newEntry) {
     return fetch(`${baseurl}/entries`, {

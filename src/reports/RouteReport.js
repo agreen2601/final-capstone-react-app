@@ -25,9 +25,9 @@ const RouteReport = (props) => {
       setEntries(r);
     });
   };
-  const entriesByDate = entries.filter((entry) =>
-    entry.date.includes(chosenDate)
-  );
+  const entriesByDate = entries
+    .filter((entry) => entry.date.includes(chosenDate))
+    .sort((a, b) => a.time.localeCompare(b.time));
 
   useEffect(() => {
     getEntries(props.chosenLocation, props.chosenEvent);
@@ -41,7 +41,7 @@ const RouteReport = (props) => {
         </Typography>
         <Grid container spacing={3}>
           <Grid item xs={12} md={3}>
-            <InputLabel>Select Event:</InputLabel>
+            <InputLabel>Event:</InputLabel>
             <Select
               id="eventId"
               native
@@ -63,7 +63,7 @@ const RouteReport = (props) => {
             </Select>
           </Grid>
           <Grid item xs={12} md={3}>
-            <InputLabel>Select Location:</InputLabel>
+            <InputLabel>Location:</InputLabel>
             <Select
               id="locationId"
               native
@@ -85,7 +85,7 @@ const RouteReport = (props) => {
             </Select>
           </Grid>
           <Grid item xs={12} md={3}>
-            <InputLabel>Select Date:</InputLabel>
+            <InputLabel>Date:</InputLabel>
             <Select
               id="dateId"
               native

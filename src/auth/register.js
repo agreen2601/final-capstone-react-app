@@ -74,13 +74,6 @@ const Register = (props) => {
         </Typography>
         <form onSubmit={handleSubmit} autoComplete="on">
           <Grid container spacing={2}>
-            {/* For now, this is the most common error we will be facing */}
-            {/* {props.failedLogin 
-            ? <Message negative>
-                <p>{props.failedLoginMessage}</p>
-              </Message>
-            : <></> 
-          } */}
             <Grid item xs={12} sm={6}>
               <TextField
                 autoComplete="fname"
@@ -155,7 +148,7 @@ const Register = (props) => {
         </form>
         <Grid container justify="flex-end">
           <Grid item>
-            <Link to="/login" variant="body2">
+            <Link to="/" variant="body2">
               Already have an account? Sign in
             </Link>
           </Grid>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -13,7 +13,6 @@ const Login = (props) => {
     username: "",
     password: "",
   });
-  const [failedLogin, setFailedLogin] = useState(false);
 
   const handleFieldChange = (evt) => {
     const stateToChange = { ...formData };
@@ -33,17 +32,11 @@ const Login = (props) => {
       if ("token" in resp) {
         props.setUserToken(resp);
         props.history.push("/entry/form");
-      }
-      // If there is no token,
-      // the login was unsuccessful,
-      // and so an error message is displayed
-      else {
-        setFailedLogin(true);
+      } else {
+        alert("User/password combination not found.");
       }
     });
   };
-
-  useEffect(() => {}, [failedLogin]);
 
   return (
     <>
@@ -57,16 +50,6 @@ const Login = (props) => {
                   Login
                 </Typography>
                 <form noValidate>
-                  {/* {props.failedLogin ? (
-              <Message negative>
-                <p>
-                  The username or password you entered is incorrect, please try
-                  again.
-                </p>
-              </Message>
-            ) : (
-              <></>
-            )} */}
                   <TextField
                     variant="outlined"
                     margin="normal"

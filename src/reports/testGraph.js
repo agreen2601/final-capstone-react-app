@@ -12,7 +12,7 @@ const TestGraph = (props) => {
     )
   );
 
-  console.log(timeNumberfied)
+  // console.log(timeNumberfied)
 
   //   console.log(entries.map((entry) => (entry.time.split(":")[1] / 60).toString().split(".")[1]));
 
