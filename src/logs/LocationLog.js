@@ -31,16 +31,11 @@ const LocationLog = (props) => {
   const getEntries = props.getEntries;
 
   const filteredEntries = allEntries
-    .filter((each) => each.event_id.toString().includes(chosenEvent))
-    .filter((each2) =>
-      each2.place_id.toString().includes(chosenLocation)
-    )
-    .filter((each3) =>
-      each3.place.route.name.includes(chosenRoute)
-    )
-    .filter((each4) =>
-      each4.date.includes(chosenDate)
-    );
+    .filter((each1) => each1.event_id.toString().includes(chosenEvent))
+    .filter((each2) => each2.place_id.toString().includes(chosenLocation))
+    .filter((each3) => each3.place.route.name.includes(chosenRoute))
+    .filter((each4) => each4.date.includes(chosenDate))
+    .sort((a, b) => a.time.localeCompare(b.time));
 
   let totalAttendeeCount = 0;
   if (filteredEntries.length !== 0) {
@@ -195,7 +190,8 @@ const LocationLog = (props) => {
                   {entry.user.first_name} {entry.user.last_name}
                 </TableCell>
                 <TableCell align="right">
-                  {parseInt(window.sessionStorage.getItem("userID")) === entry.user_id ? (
+                  {parseInt(window.sessionStorage.getItem("userID")) ===
+                  entry.user_id ? (
                     <>
                       <EditIcon
                         onClick={() =>
