@@ -20,7 +20,7 @@ const LocationLog = (props) => {
   const events = props.events;
   const dates = props.uniqueDates;
   const chosenLocation = props.chosenLocation;
-  const chosenRoute = props.chosenRoute;
+  // const chosenRoute = props.chosenRoute;
   const chosenEvent = props.chosenEvent;
   const chosenDate = props.chosenDate;
   const handleChosenLocationChange = props.handleChosenLocationChange;
@@ -191,7 +191,7 @@ const LocationLog = (props) => {
             {entriesByDate.map((entry) => (
               <TableRow key={entry.id}>
                 <TableCell component="th" scope="entry">
-                  {entry.time}
+                  {entry.time.slice(0, -3)}
                 </TableCell>
                 <TableCell align="right">{entry.vehicle_number}</TableCell>
                 <TableCell align="right">{entry.attendee_count}</TableCell>
@@ -199,14 +199,18 @@ const LocationLog = (props) => {
                   {entry.user.first_name} {entry.user.last_name}
                 </TableCell>
                 <TableCell align="right">
-                  <EditIcon
-                    onClick={() =>
-                      props.history.push(`/entry/edit/form/${entry.id}`)
-                    }
-                  />
-                  <DeleteOutlinedIcon
-                    onClick={() => deleteThisEntry(entry.id)}
-                  />
+                  {window.sessionStorage.getItem("userID") == entry.user_id ? (
+                    <>
+                      <EditIcon
+                        onClick={() =>
+                          props.history.push(`/entry/edit/form/${entry.id}`)
+                        }
+                      />
+                      <DeleteOutlinedIcon
+                        onClick={() => deleteThisEntry(entry.id)}
+                      />
+                    </>
+                  ) : null}
                 </TableCell>
               </TableRow>
             ))}

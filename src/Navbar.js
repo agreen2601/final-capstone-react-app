@@ -5,6 +5,8 @@ import BarChartIcon from "@material-ui/icons/BarChart";
 import ListIcon from "@material-ui/icons/List";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+// import Typography from "@material-ui/core/Typography";
+// import Box from "@material-ui/core/Box";
 
 const NavBar = (props) => {
   const hasUser = props.hasUser;
@@ -12,7 +14,7 @@ const NavBar = (props) => {
 
   return (
     <>
-      <Navbar align="right">
+      <Navbar>
         {hasUser ? (
           <Link to="/entry/form">
             <PlaylistAddIcon style={{ fontSize: 30 }} color="action" />
