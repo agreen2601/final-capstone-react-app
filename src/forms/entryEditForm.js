@@ -11,12 +11,12 @@ import apiManager from "../api/apiManager";
 const EntryEditForm = (props) => {
   const events = props.events;
   const locations = props.locations;
-  const chosenLocation = props.chosenLocation;
+  // const chosenLocation = props.chosenLocation;
   // const chosenRoute = props.chosenRoute;
-  const chosenEvent = props.chosenEvent;
+  // const chosenEvent = props.chosenEvent;
   // const chosenDate = props.chosenDate;
-  const handleChosenEventChange = props.handleChosenEventChange;
-  const handleChosenLocationChange = props.handleChosenLocationChange;
+  // const handleChosenEventChange = props.handleChosenEventChange;
+  // const handleChosenLocationChange = props.handleChosenLocationChange;
   // const handleChosenDateChange = props.handleChosenDateChange
   const [entry, setEntry] = useState({
     event_id: "",
@@ -28,10 +28,10 @@ const EntryEditForm = (props) => {
   });
 
   // set values for entry from state from dropdowns, which carry over from form to log and back without changing until user chooses new
-    entry.place_id = chosenLocation;
-    // entry.route_id = chosenRoute;
-    entry.event_id = chosenEvent;
-    // entry.date = chosenDate;
+  // entry.place_id = chosenLocation;
+  // entry.route_id = chosenRoute;
+  // entry.event_id = chosenEvent;
+  // entry.date = chosenDate;
 
   // update state of entry upon form field change
   const handleEntryChange = (e) => {
@@ -41,16 +41,17 @@ const EntryEditForm = (props) => {
   };
 
   useEffect(() => {
-    apiManager.getSingleType("entries", props.match.params.entryId).then((entry) => {
-      setEntry(entry);
-    });
+    apiManager
+      .getSingleType("entries", props.match.params.entryId)
+      .then((entry) => {
+        setEntry(entry);
+      });
   }, [props.match.params.entryId]);
 
   const editedEntry = {
     id: props.match.params.entryId,
-    event_id: chosenEvent,
-    place_id: chosenLocation,
-    // route_id: chosenRoute,
+    event_id: entry.event_id,
+    place_id: entry.place_id,
     date: entry.date,
     attendee_count: entry.attendee_count,
     vehicle_number: entry.vehicle_number,
@@ -77,14 +78,14 @@ const EntryEditForm = (props) => {
               <Select
                 id="event_id"
                 native
-                onChange={handleChosenEventChange}
+                onChange={handleEntryChange}
                 fullWidth
                 required
                 value={entry.event_id}
               >
                 {events ? (
                   events.map((event) => (
-                    <option key={event.id} value={event.id}>
+                    <option key={event.id} value={parseInt(event.id)}>
                       {event.name}
                     </option>
                   ))
@@ -98,7 +99,7 @@ const EntryEditForm = (props) => {
               <Select
                 id="place_id"
                 native
-                onChange={handleChosenLocationChange}
+                onChange={handleEntryChange}
                 fullWidth
                 required
                 value={entry.place_id}

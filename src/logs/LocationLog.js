@@ -35,7 +35,8 @@ const LocationLog = (props) => {
     .filter((each2) => each2.place_id.toString().includes(chosenLocation))
     .filter((each3) => each3.place.route.name.includes(chosenRoute))
     .filter((each4) => each4.date.includes(chosenDate))
-    .sort((a, b) => a.time.localeCompare(b.time));
+    .sort((a, b) => a.time.localeCompare(b.time))
+    .sort((a, b) => a.date.localeCompare(b.date));
 
   let totalAttendeeCount = 0;
   if (filteredEntries.length !== 0) {
@@ -175,6 +176,8 @@ const LocationLog = (props) => {
               <TableCell align="right">Vehicle #</TableCell>
               <TableCell align="right">Attendee Count</TableCell>
               <TableCell align="right">Entered By</TableCell>
+              <TableCell align="right">Date</TableCell>
+              <TableCell align="right">Location</TableCell>
               <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -189,6 +192,8 @@ const LocationLog = (props) => {
                 <TableCell align="right">
                   {entry.user.first_name} {entry.user.last_name}
                 </TableCell>
+                <TableCell align="right">{entry.date.slice(5)}</TableCell>
+                <TableCell align="right">{entry.place.name}</TableCell>
                 <TableCell align="right">
                   {parseInt(window.sessionStorage.getItem("userID")) ===
                   entry.user_id ? (

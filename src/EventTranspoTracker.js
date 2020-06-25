@@ -32,10 +32,10 @@ const EventTranspoTracker = () => {
   const [routes, setRoutes] = useState([]);
   const [events, setEvents] = useState([]);
   const [entries, setEntries] = useState([]);
-  const [chosenLocation, setChosenLocation] = useState(1);
+  const [chosenLocation, setChosenLocation] = useState("");
   const [chosenRoute, setChosenRoute] = useState("");
-  const [chosenEvent, setChosenEvent] = useState(1);
-  const [chosenDate, setChosenDate] = useState(moment().format("YYYY-MM-DD"));
+  const [chosenEvent, setChosenEvent] = useState("");
+  const [chosenDate, setChosenDate] = useState("2020-06-24");
 
   // get and sort in alpha order all locations for the dropdown menus and pass them to the form and the log
   const getLocations = () => {
@@ -196,14 +196,16 @@ const EventTranspoTracker = () => {
           hasUser ? (
             <RouteReport
               locations={locations}
+              routes={routes}
               events={events}
               entries={entries}
               uniqueDates={uniqueDates}
               chosenLocation={chosenLocation}
-              // chosenRoute={chosenRoute}
+              chosenRoute={chosenRoute}
               chosenEvent={chosenEvent}
               chosenDate={chosenDate}
               handleChosenLocationChange={handleChosenLocationChange}
+              handleChosenRouteChange={handleChosenRouteChange}
               handleChosenEventChange={handleChosenEventChange}
               handleChosenDateChange={handleChosenDateChange}
               {...props}

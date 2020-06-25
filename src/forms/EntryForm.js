@@ -15,7 +15,6 @@ const EntryForm = (props) => {
   const locations = props.locations;
   const events = props.events;
   const chosenLocation = props.chosenLocation;
-  // const chosenRoute = props.chosenRoute;
   const chosenEvent = props.chosenEvent;
   const chosenDate = props.chosenDate;
   const handleChosenLocationChange = props.handleChosenLocationChange;
@@ -29,7 +28,6 @@ const EntryForm = (props) => {
 
   // set values for entry from state from dropdowns, which carry over from form to log and back without changing until user chooses new
   entry.place_id = chosenLocation;
-  // entry.route_id = chosenRoute;
   entry.event_id = chosenEvent;
   entry.date = chosenDate;
 
