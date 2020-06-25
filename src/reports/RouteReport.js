@@ -3,9 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import Typography from "@material-ui/core/Typography";
-import RouteGraph from "./routeGraph";
-import TestGraph from "./testGraph";
-import TestA from "./testA"
+import RouteGraph from "./routeGraph"
 
 const RouteReport = (props) => {
   const locations = props.locations;
@@ -152,8 +150,8 @@ const RouteReport = (props) => {
         </Typography>
       <div>
         <RouteGraph filteredEntries={filteredEntries} {...props} />
-        <TestGraph filteredEntries={filteredEntries} {...props} />
-        <TestA filteredEntries={filteredEntries} {...props} />
+        {/* <TestGraph filteredEntries={filteredEntries} {...props} /> */}
+        {/* <TestA filteredEntries={filteredEntries} {...props} /> */}
       </div>
     </>
   );

@@ -8,7 +8,6 @@ import RouteReport from "./reports/routeReport";
 import LocationLog from "./logs/locationLog";
 import Login from "./auth/login";
 import Register from "./auth/register";
-import moment from "moment";
 
 const EventTranspoTracker = () => {
   const isAuthenticated = () => sessionStorage.getItem("token") !== null;
@@ -35,7 +34,7 @@ const EventTranspoTracker = () => {
   const [chosenLocation, setChosenLocation] = useState("");
   const [chosenRoute, setChosenRoute] = useState("");
   const [chosenEvent, setChosenEvent] = useState("");
-  const [chosenDate, setChosenDate] = useState("2020-06-24");
+  const [chosenDate, setChosenDate] = useState("");
 
   // get and sort in alpha order all locations for the dropdown menus and pass them to the form and the log
   const getLocations = () => {
