@@ -32,7 +32,7 @@ const NavBar = (props) => {
               </Link>
             </span>
             <span className="nav-icon">
-              <Link to="/" onClick={clearUser}>
+              <Link to="/login" onClick={clearUser}>
                 <ExitToAppIcon style={{ fontSize: 30 }} color="action" />
               </Link>
             </span>

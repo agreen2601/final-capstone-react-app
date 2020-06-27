@@ -29,9 +29,9 @@ const Login = (props) => {
       password: formData.password,
     };
 
-    apiManager.login(user).then((resp) => {
-      if ("token" in resp) {
-        props.setUserToken(resp);
+    apiManager.login(user).then((r) => {
+      if ("token" in r) {
+        props.setUserToken(r);
         props.history.push("/entry/form");
       } else {
         alert("User/password combination not found.");
@@ -75,6 +75,7 @@ const Login = (props) => {
                     autoComplete="current-password"
                     onChange={handleFieldChange}
                   />
+                  <br></br><br></br>
                   <Button
                     type="submit"
                     fullWidth
@@ -85,6 +86,7 @@ const Login = (props) => {
                   </Button>
                   <Grid container>
                     <Grid item>
+                      <br></br>
                       <Link to="/register" variant="body2">
                         {"Don't have an account? Sign Up"}
                       </Link>

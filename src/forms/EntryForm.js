@@ -107,7 +107,6 @@ const EntryForm = (props) => {
               native
               onChange={handleChosenRouteChange}
               fullWidth
-              required
               value={chosenRoute}
             >
               <option aria-label="None" value="">
@@ -135,7 +134,7 @@ const EntryForm = (props) => {
               value={chosenLocation}
             >
               <option aria-label="None" value="">
-                Choose Locations
+                Choose Location
               </option>
               {locations ? (
                 locations.map((place) => (

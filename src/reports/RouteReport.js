@@ -44,6 +44,31 @@ const RouteReport = (props) => {
       <div className="drop-downs">
         <Grid container spacing={3}>
           <Grid item xs={12} md={3}>
+            <InputLabel>Date:</InputLabel>
+            <Select
+              id="dateId"
+              native
+              onChange={handleChosenDateChange}
+              fullWidth
+              required
+              label="??"
+              value={chosenDate}
+            >
+              <option aria-label="None" value="">
+                Choose Date
+              </option>
+              {dates ? (
+                dates.map((date) => (
+                  <option key={date} value={date}>
+                    {date}
+                  </option>
+                ))
+              ) : (
+                <></>
+              )}
+            </Select>
+          </Grid>
+          <Grid item xs={12} md={3}>
             <InputLabel>Event:</InputLabel>
             <Select
               id="eventId"
@@ -61,31 +86,6 @@ const RouteReport = (props) => {
                 events.map((event) => (
                   <option key={event.id} value={parseInt(event.id)}>
                     {event.name}
-                  </option>
-                ))
-              ) : (
-                <></>
-              )}
-            </Select>
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <InputLabel>Location:</InputLabel>
-            <Select
-              id="placeId"
-              native
-              onChange={handleChosenLocationChange}
-              fullWidth
-              required
-              label="??"
-              value={chosenLocation}
-            >
-              <option aria-label="None" value="">
-                All Locations
-              </option>
-              {locations ? (
-                locations.map((place) => (
-                  <option key={place.id} value={parseInt(place.id)}>
-                    {place.name}
                   </option>
                 ))
               ) : (
@@ -118,23 +118,23 @@ const RouteReport = (props) => {
             </Select>
           </Grid>
           <Grid item xs={12} md={3}>
-            <InputLabel>Date:</InputLabel>
+            <InputLabel>Location:</InputLabel>
             <Select
-              id="dateId"
+              id="placeId"
               native
-              onChange={handleChosenDateChange}
+              onChange={handleChosenLocationChange}
               fullWidth
               required
               label="??"
-              value={chosenDate}
+              value={chosenLocation}
             >
               <option aria-label="None" value="">
-                Choose Date
+                All Locations
               </option>
-              {dates ? (
-                dates.map((date) => (
-                  <option key={date} value={date}>
-                    {date}
+              {locations ? (
+                locations.map((place) => (
+                  <option key={place.id} value={parseInt(place.id)}>
+                    {place.name}
                   </option>
                 ))
               ) : (

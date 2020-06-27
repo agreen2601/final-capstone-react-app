@@ -25,9 +25,9 @@ const EventTranspoTracker = () => {
     setHasUser(isAuthenticated());
   };
 
-  // locations and events are all locations and events to fill the dropdown menus
-  // chosenLocation and chosenEvent are the choices made from the dropdowns
-  // chosenRoute is dependent upon chosen location (fetch location info with locationId then access .route_id)
+  // locations routes and events fill the dropdown menus
+  // locations filter based on chosenRoute
+  // chosenLocation chosenRoute and chosenEvent are the choices made from the dropdowns
   const [locations, setLocations] = useState([]);
   const [routes, setRoutes] = useState([]);
   const [events, setEvents] = useState([]);
@@ -37,7 +37,7 @@ const EventTranspoTracker = () => {
   const [chosenEvent, setChosenEvent] = useState("");
   const [chosenDate, setChosenDate] = useState("");
 
-  // get and sort in alpha order all locations for the dropdown menus and pass them to the form and the log
+  // get and sort in alpha order all locations for the dropdown menus
   const getLocations = () => {
     apiManager.getAllType("places").then((r) => {
       r.sort((a, b) => a.name.localeCompare(b.name));
@@ -45,14 +45,23 @@ const EventTranspoTracker = () => {
     });
   };
 
-  // set choseLocation based on choice from dropdown menu on form and log
+  // set choseLocation based on choice from dropdown menu
   const handleChosenLocationChange = (e) => {
     const placeId = e.target.value;
     setChosenLocation(placeId);
-    setChosenRoute("");
+    if (placeId !== "") {
+      // apiManager.getSingleType("places", placeId).then((r) => {
+      //   apiManager.getSingleType("routes", r.route_id).then((re) => {
+      //     // setRoutes([re]);
+      //     // setChosenRoute(re.name)
+      //   });
+      // });
+    } else {
+      getRoutes();
+    }
   };
 
-  // // get and sort in alpha order all routes for the dropdown menus and pass them to the form and the log
+  // // get and sort in alpha order all routes for the dropdown menus and pass them to the form log and graph
   const getRoutes = () => {
     apiManager.getAllType("routes").then((r) => {
       r.sort((a, b) => a.name.localeCompare(b.name));
@@ -60,33 +69,23 @@ const EventTranspoTracker = () => {
     });
   };
 
-  // // set choseroute based on choice from dropdown menu on form and log
+  // // set choseroute based on choice from dropdown menu on form log and graph
   const handleChosenRouteChange = (e) => {
     const routeId = e.target.value;
     setChosenRoute(routeId);
+    setChosenLocation("")
     apiManager.getAllType("places").then((r) => {
-      const locationsByRoute = r
-        .filter((each) => each.route.name === chosenRoute)
-        .sort((a, b) => a.name.localeCompare(b.name));
-      console.log(locationsByRoute);
-      setLocations(locationsByRoute);
-      // console.log(r)
-      // console.log(chosenRoute)
-      // setLocations(r);
+      if (routeId !== "") {
+        setLocations(
+          r
+            .filter((each) => each.route.name === routeId)
+            .sort((a, b) => a.name.localeCompare(b.name))
+        );
+      } else {
+        setLocations(r.sort((a, b) => a.name.localeCompare(b.name)));
+      }
     });
   };
-
-  // setTimeout(() => {
-  //     apiManager.postEntry(entry).then((r) => {
-  //       document.getElementById("attendee_count").value = "";
-  //       document.getElementById("vehicle_number").value = "";
-  //       setEntry({
-  //         attendee_count: "",
-  //         vehicle_number: "",
-  //         time: moment().format("HH:mm"),
-  //       });
-  //     });
-  //   }, 100);
 
   // get and sort in alpha order all events for the dropdown menus
   const getEvents = () => {
@@ -119,24 +118,37 @@ const EventTranspoTracker = () => {
 
   // watch for change in chosenlocation and update chosenroute at the same time
   useEffect(() => {
-    getLocations();
     getEvents();
     getEntries();
+    getLocations();
     getRoutes();
   }, []);
 
   return (
     <BrowserRouter>
       <NavBar hasUser={hasUser} clearUser={clearUser} />
+      <Route exact path="/" render={() => <Redirect to="/login" />} />
       <Route
         exact
-        path="/"
-        render={(props) => <Login setUserToken={setUserToken} {...props} />}
+        path="/login"
+        render={(props) =>
+          hasUser ? (
+            <Redirect to="/entry/form" />
+          ) : (
+            <Login setUserToken={setUserToken} {...props} />
+          )
+        }
       />
       <Route
         exact
         path="/register"
-        render={(props) => <Register setUserToken={setUserToken} {...props} />}
+        render={(props) =>
+          hasUser ? (
+            <Redirect to="/entry/form" />
+          ) : (
+            <Register setUserToken={setUserToken} {...props} />
+          )
+        }
       />
       <Route
         exact
@@ -158,7 +170,7 @@ const EventTranspoTracker = () => {
               {...props}
             />
           ) : (
-            <Redirect to="/" />
+            <Redirect to="/login" />
           )
         }
       />
@@ -169,18 +181,20 @@ const EventTranspoTracker = () => {
           hasUser ? (
             <EntryEditForm
               locations={locations}
+              routes={routes}
               events={events}
               chosenLocation={chosenLocation}
-              // chosenRoute={chosenRoute}
+              chosenRoute={chosenRoute}
               chosenEvent={chosenEvent}
               chosenDate={chosenDate}
               handleChosenLocationChange={handleChosenLocationChange}
+              handleChosenRouteChange={handleChosenRouteChange}
               handleChosenEventChange={handleChosenEventChange}
               handleChosenDateChange={handleChosenDateChange}
               {...props}
             />
           ) : (
-            <Redirect to="/" />
+            <Redirect to="/login" />
           )
         }
       />
@@ -207,7 +221,7 @@ const EventTranspoTracker = () => {
               {...props}
             />
           ) : (
-            <Redirect to="/" />
+            <Redirect to="/login" />
           )
         }
       />
@@ -233,7 +247,7 @@ const EventTranspoTracker = () => {
               {...props}
             />
           ) : (
-            <Redirect to="/" />
+            <Redirect to="/login" />
           )
         }
       />

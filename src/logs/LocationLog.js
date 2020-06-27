@@ -66,6 +66,30 @@ const LocationLog = (props) => {
       </Typography>
       <div className="drop-downs">
         <Grid container spacing={3}>
+        <Grid item xs={12} md={3}>
+            <InputLabel>Date:</InputLabel>
+            <Select
+              id="dateId"
+              native
+              onChange={handleChosenDateChange}
+              fullWidth
+              required
+              value={chosenDate}
+            >
+              <option aria-label="None" value="">
+                All Dates
+              </option>
+              {dates ? (
+                dates.map((date) => (
+                  <option key={date} value={date}>
+                    {date}
+                  </option>
+                ))
+              ) : (
+                <></>
+              )}
+            </Select>
+          </Grid>
           <Grid item xs={12} md={3}>
             <InputLabel>Event:</InputLabel>
             <Select
@@ -83,30 +107,6 @@ const LocationLog = (props) => {
                 events.map((event) => (
                   <option key={event.id} value={parseInt(event.id)}>
                     {event.name}
-                  </option>
-                ))
-              ) : (
-                <></>
-              )}
-            </Select>
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <InputLabel>Location:</InputLabel>
-            <Select
-              id="placeId"
-              native
-              onChange={handleChosenLocationChange}
-              fullWidth
-              required
-              value={chosenLocation}
-            >
-              <option aria-label="None" value="">
-                All Locations
-              </option>
-              {locations ? (
-                locations.map((place) => (
-                  <option key={place.id} value={parseInt(place.id)}>
-                    {place.name}
                   </option>
                 ))
               ) : (
@@ -139,22 +139,22 @@ const LocationLog = (props) => {
             </Select>
           </Grid>
           <Grid item xs={12} md={3}>
-            <InputLabel>Date:</InputLabel>
+            <InputLabel>Location:</InputLabel>
             <Select
-              id="dateId"
+              id="placeId"
               native
-              onChange={handleChosenDateChange}
+              onChange={handleChosenLocationChange}
               fullWidth
               required
-              value={chosenDate}
+              value={chosenLocation}
             >
               <option aria-label="None" value="">
-                All Dates
+                All Locations
               </option>
-              {dates ? (
-                dates.map((date) => (
-                  <option key={date} value={date}>
-                    {date}
+              {locations ? (
+                locations.map((place) => (
+                  <option key={place.id} value={parseInt(place.id)}>
+                    {place.name}
                   </option>
                 ))
               ) : (
@@ -174,17 +174,17 @@ const LocationLog = (props) => {
               <TableCell>Time</TableCell>
               <TableCell align="right">Vehicle #</TableCell>
               <TableCell align="right">Pax</TableCell>
+              {chosenDate === "" ? (
+                <TableCell align="right">Date</TableCell>
+              ) : null}
               {chosenEvent === "" ? (
                 <TableCell align="right">Event</TableCell>
-              ) : null}
-              {chosenLocation === "" ? (
-                <TableCell align="right">Location</TableCell>
               ) : null}
               {chosenRoute === "" ? (
                 <TableCell align="right">Route</TableCell>
               ) : null}
-              {chosenDate === "" ? (
-                <TableCell align="right">Date</TableCell>
+              {chosenLocation === "" ? (
+                <TableCell align="right">Location</TableCell>
               ) : null}
               <TableCell align="right">Entered By</TableCell>
               <TableCell align="right">Actions</TableCell>
@@ -198,17 +198,17 @@ const LocationLog = (props) => {
                 </TableCell>
                 <TableCell align="right">{entry.vehicle_number}</TableCell>
                 <TableCell align="right">{entry.attendee_count}</TableCell>
+                {chosenDate === "" ? (
+                  <TableCell align="right">{entry.date.slice(5)}</TableCell>
+                ) : null}
                 {chosenEvent === "" ? (
                   <TableCell align="right">{entry.event.name}</TableCell>
-                ) : null}
-                {chosenLocation === "" ? (
-                  <TableCell align="right">{entry.place.name}</TableCell>
                 ) : null}
                 {chosenRoute === "" ? (
                   <TableCell align="right">{entry.place.route.name}</TableCell>
                 ) : null}
-                {chosenDate === "" ? (
-                  <TableCell align="right">{entry.date.slice(5)}</TableCell>
+                {chosenLocation === "" ? (
+                  <TableCell align="right">{entry.place.name}</TableCell>
                 ) : null}
                 <TableCell align="right">
                   {entry.user.first_name} {entry.user.last_name}

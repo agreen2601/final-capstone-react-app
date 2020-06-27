@@ -11,12 +11,14 @@ import apiManager from "../api/apiManager";
 const EntryEditForm = (props) => {
   const events = props.events;
   const locations = props.locations;
+  const routes = props.routes;
   // const chosenLocation = props.chosenLocation;
   // const chosenRoute = props.chosenRoute;
   // const chosenEvent = props.chosenEvent;
   // const chosenDate = props.chosenDate;
   // const handleChosenEventChange = props.handleChosenEventChange;
   // const handleChosenLocationChange = props.handleChosenLocationChange;
+  const handleChosenRouteChange = props.handleChosenRouteChange;
   // const handleChosenDateChange = props.handleChosenDateChange
   const [entry, setEntry] = useState({
     event_id: "",
@@ -65,6 +67,11 @@ const EntryEditForm = (props) => {
     });
   };
 
+  let routeVal = "";
+  if (entry.place !== undefined) {
+    routeVal = entry.place.route.name;
+  }
+
   return (
     <>
       <div className="event-form-page">
@@ -95,6 +102,29 @@ const EntryEditForm = (props) => {
               </Select>
             </Grid>
             <Grid item xs={12} md={3}>
+              <InputLabel>Route:</InputLabel>
+              <Select
+                id="routeId"
+                native
+                onChange={handleChosenRouteChange}
+                fullWidth
+                // value={routeVal}
+              >
+                <option aria-label="None" value="">
+                  Choose Route
+                </option>
+                {routes ? (
+                  routes.map((route) => (
+                    <option key={route.id} value={route.name}>
+                      {route.name} {route.description}
+                    </option>
+                  ))
+                ) : (
+                  <></>
+                )}
+              </Select>
+            </Grid>
+            <Grid item xs={12} md={3}>
               <InputLabel>Location:</InputLabel>
               <Select
                 id="place_id"
@@ -104,6 +134,9 @@ const EntryEditForm = (props) => {
                 required
                 value={entry.place_id}
               >
+                <option aria-label="None" value="">
+                  Choose Location
+                </option>
                 {locations ? (
                   locations.map((place) => (
                     <option key={place.id} value={parseInt(place.id)}>

@@ -49,9 +49,9 @@ const Register = (props) => {
 
     apiManager
       .register(user)
-      .then((resp) => {
-        if ("token" in resp) {
-          props.setUserToken(resp);
+      .then((r) => {
+        if ("token" in r) {
+          props.setUserToken(r);
           props.history.push("/entry/form");
         }
       })
@@ -142,12 +142,14 @@ const Register = (props) => {
               />
             </Grid>
           </Grid>
+          <br></br>
           <Button type="submit" fullWidth variant="contained" color="primary">
             Submit
           </Button>
         </form>
         <Grid container justify="flex-end">
           <Grid item>
+            <br></br>
             <Link to="/" variant="body2">
               Already have an account? Sign in
             </Link>
