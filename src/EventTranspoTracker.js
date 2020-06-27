@@ -8,6 +8,7 @@ import RouteReport from "./reports/routeReport";
 import LocationLog from "./logs/locationLog";
 import Login from "./auth/login";
 import Register from "./auth/register";
+import "./styles.css";
 
 const EventTranspoTracker = () => {
   const isAuthenticated = () => sessionStorage.getItem("token") !== null;
@@ -63,8 +64,29 @@ const EventTranspoTracker = () => {
   const handleChosenRouteChange = (e) => {
     const routeId = e.target.value;
     setChosenRoute(routeId);
-    setChosenLocation("");
+    apiManager.getAllType("places").then((r) => {
+      const locationsByRoute = r
+        .filter((each) => each.route.name === chosenRoute)
+        .sort((a, b) => a.name.localeCompare(b.name));
+      console.log(locationsByRoute);
+      setLocations(locationsByRoute);
+      // console.log(r)
+      // console.log(chosenRoute)
+      // setLocations(r);
+    });
   };
+
+  // setTimeout(() => {
+  //     apiManager.postEntry(entry).then((r) => {
+  //       document.getElementById("attendee_count").value = "";
+  //       document.getElementById("vehicle_number").value = "";
+  //       setEntry({
+  //         attendee_count: "",
+  //         vehicle_number: "",
+  //         time: moment().format("HH:mm"),
+  //       });
+  //     });
+  //   }, 100);
 
   // get and sort in alpha order all events for the dropdown menus
   const getEvents = () => {
@@ -123,13 +145,14 @@ const EventTranspoTracker = () => {
           hasUser ? (
             <EntryForm
               locations={locations}
+              routes={routes}
               events={events}
               chosenLocation={chosenLocation}
-              // chosenRoute={chosenRoute}
+              chosenRoute={chosenRoute}
               chosenEvent={chosenEvent}
               chosenDate={chosenDate}
               handleChosenLocationChange={handleChosenLocationChange}
-              // handleChosenRouteChange={handleChosenRouteChange}
+              handleChosenRouteChange={handleChosenRouteChange}
               handleChosenEventChange={handleChosenEventChange}
               handleChosenDateChange={handleChosenDateChange}
               {...props}

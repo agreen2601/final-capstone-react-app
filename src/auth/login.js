@@ -7,6 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import apiManager from "../api/apiManager";
+import "../styles.css";
 
 const Login = (props) => {
   const [formData, setFormData] = useState({

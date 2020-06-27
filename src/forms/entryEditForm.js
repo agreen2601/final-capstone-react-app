@@ -68,10 +68,10 @@ const EntryEditForm = (props) => {
   return (
     <>
       <div className="event-form-page">
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h5" className="page-header">
           Edit Entry
         </Typography>
-        <form className="event_form" onSubmit={handleSubmit}>
+        <form className="drop-downs" onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={3}>
               <InputLabel>Event:</InputLabel>
@@ -161,9 +161,11 @@ const EntryEditForm = (props) => {
             </Grid>
           </Grid>
           <Grid>
-            <Button type="submit" variant="contained" color="primary">
-              Submit
-            </Button>
+            <div className="submit-button">
+              <Button type="submit" variant="contained" color="primary">
+                Submit
+              </Button>
+            </div>
           </Grid>
         </form>
       </div>

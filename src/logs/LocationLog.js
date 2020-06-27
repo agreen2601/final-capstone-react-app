@@ -9,7 +9,6 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
 import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/Edit";
 import apiManager from "../api/apiManager";
@@ -62,10 +61,10 @@ const LocationLog = (props) => {
 
   return (
     <>
-      <div>
-        <Typography component="h1" variant="h5">
-          Location Logs
-        </Typography>
+      <Typography component="h1" variant="h5">
+        Location Logs
+      </Typography>
+      <div className="drop-downs">
         <Grid container spacing={3}>
           <Grid item xs={12} md={3}>
             <InputLabel>Event:</InputLabel>
@@ -168,16 +167,26 @@ const LocationLog = (props) => {
       <Typography variant="h6">
         {totalAttendeeCount} attendees moved in {filteredEntries.length} trips.
       </Typography>
-      <TableContainer component={Paper}>
-        <Table size="small" aria-label="a dense table">
+      <TableContainer>
+        <Table size="small">
           <TableHead>
             <TableRow>
               <TableCell>Time</TableCell>
               <TableCell align="right">Vehicle #</TableCell>
-              <TableCell align="right">Attendee Count</TableCell>
+              <TableCell align="right">Pax</TableCell>
+              {chosenEvent === "" ? (
+                <TableCell align="right">Event</TableCell>
+              ) : null}
+              {chosenLocation === "" ? (
+                <TableCell align="right">Location</TableCell>
+              ) : null}
+              {chosenRoute === "" ? (
+                <TableCell align="right">Route</TableCell>
+              ) : null}
+              {chosenDate === "" ? (
+                <TableCell align="right">Date</TableCell>
+              ) : null}
               <TableCell align="right">Entered By</TableCell>
-              <TableCell align="right">Date</TableCell>
-              <TableCell align="right">Location</TableCell>
               <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -189,23 +198,37 @@ const LocationLog = (props) => {
                 </TableCell>
                 <TableCell align="right">{entry.vehicle_number}</TableCell>
                 <TableCell align="right">{entry.attendee_count}</TableCell>
+                {chosenEvent === "" ? (
+                  <TableCell align="right">{entry.event.name}</TableCell>
+                ) : null}
+                {chosenLocation === "" ? (
+                  <TableCell align="right">{entry.place.name}</TableCell>
+                ) : null}
+                {chosenRoute === "" ? (
+                  <TableCell align="right">{entry.place.route.name}</TableCell>
+                ) : null}
+                {chosenDate === "" ? (
+                  <TableCell align="right">{entry.date.slice(5)}</TableCell>
+                ) : null}
                 <TableCell align="right">
                   {entry.user.first_name} {entry.user.last_name}
                 </TableCell>
-                <TableCell align="right">{entry.date.slice(5)}</TableCell>
-                <TableCell align="right">{entry.place.name}</TableCell>
                 <TableCell align="right">
                   {parseInt(window.sessionStorage.getItem("userID")) ===
                   entry.user_id ? (
                     <>
-                      <EditIcon
-                        onClick={() =>
-                          props.history.push(`/entry/edit/form/${entry.id}`)
-                        }
-                      />
-                      <DeleteOutlinedIcon
-                        onClick={() => deleteThisEntry(entry.id)}
-                      />
+                      <span className="action-icon">
+                        <EditIcon
+                          onClick={() =>
+                            props.history.push(`/entry/edit/form/${entry.id}`)
+                          }
+                        />
+                      </span>
+                      <span className="action-icon">
+                        <DeleteOutlinedIcon
+                          onClick={() => deleteThisEntry(entry.id)}
+                        />
+                      </span>
                     </>
                   ) : null}
                 </TableCell>

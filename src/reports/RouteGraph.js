@@ -3,6 +3,8 @@ import { Bar } from "react-chartjs-2";
 
 const RouteGraph = (props) => {
   const entries = props.filteredEntries;
+  const chosenRoute = props.chosenRoute;
+  const chosenLocation = props.chosenLocation;
 
   // round times down to nearest 10 minutes (slice off the last number) and put that and attendee counts into new array
   const times = entries.map((entry) => entry.time.slice(0, 4));
@@ -59,18 +61,25 @@ const RouteGraph = (props) => {
     return 0;
   }
 
+  let routeColor = "black";
+  if (entries.length !== 0) {
+    if (chosenLocation === "" && chosenRoute === "") {
+    } else {
+      routeColor = entries[0].place.route.color;
+    }
+  }
+
   return (
     <div>
       <Bar
-        type="bar"
         data={{
           labels: timeSpanIntervals.map((v) => v),
           datasets: [
             {
-              backgroundColor: "rgb(62, 84, 175)",
+              backgroundColor: routeColor,
               borderColor: "black",
               borderWidth: 2,
-              fill: true,
+              // fill: true,
               data: timeSpanIntervals.map((v) => getAttendeeCountOrMakeZero(v)),
             },
           ],
@@ -92,7 +101,6 @@ const RouteGraph = (props) => {
             yAxes: [
               {
                 display: true,
-                // type: "linear",
               },
             ],
           },

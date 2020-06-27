@@ -3,7 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import Typography from "@material-ui/core/Typography";
-import RouteGraph from "./routeGraph"
+import RouteGraph from "./routeGraph";
 
 const RouteReport = (props) => {
   const locations = props.locations;
@@ -38,10 +38,10 @@ const RouteReport = (props) => {
 
   return (
     <>
-      <div>
-        <Typography component="h1" variant="h5">
-          Route Reports
-        </Typography>
+      <Typography component="h1" variant="h5">
+        Route Reports
+      </Typography>
+      <div className="drop-downs">
         <Grid container spacing={3}>
           <Grid item xs={12} md={3}>
             <InputLabel>Event:</InputLabel>
@@ -129,7 +129,7 @@ const RouteReport = (props) => {
               value={chosenDate}
             >
               <option aria-label="None" value="">
-                All Dates
+                Choose Date
               </option>
               {dates ? (
                 dates.map((date) => (
@@ -144,14 +144,11 @@ const RouteReport = (props) => {
           </Grid>
         </Grid>
       </div>
-        <Typography variant="h6">
-          {totalAttendeeCount} attendees moved in {filteredEntries.length}{" "}
-          trips.
-        </Typography>
+      <Typography variant="h6">
+        {totalAttendeeCount} attendees moved in {filteredEntries.length} trips.
+      </Typography>
       <div>
-        <RouteGraph filteredEntries={filteredEntries} {...props} />
-        {/* <TestGraph filteredEntries={filteredEntries} {...props} /> */}
-        {/* <TestA filteredEntries={filteredEntries} {...props} /> */}
+        <RouteGraph filteredEntries={filteredEntries} chosenRoute={chosenRoute} chosenLocation={chosenLocation} {...props} />
       </div>
     </>
   );
