@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
@@ -10,24 +10,27 @@ const RouteReport = (props) => {
   const routes = props.routes;
   const events = props.events;
   const dates = props.uniqueDates;
-  const chosenLocation = props.chosenLocation;
+  const chosenLocationId = props.chosenLocationId;
+  const chosenLocationName = props.chosenLocationName;
   const chosenRoute = props.chosenRoute;
-  const chosenEvent = props.chosenEvent;
+  const chosenEventId = props.chosenEventId;
+  const chosenEventName = props.chosenEventName;
   const chosenDate = props.chosenDate;
   const handleChosenLocationChange = props.handleChosenLocationChange;
   const handleChosenRouteChange = props.handleChosenRouteChange;
   const handleChosenEventChange = props.handleChosenEventChange;
   const handleChosenDateChange = props.handleChosenDateChange;
   const allEntries = props.entries;
+  const getEntries = props.getEntries;
 
-  // get entries based on location and event chosen from dropdowns then filter based on date
+  // filter entries based on dropdowns
   const filteredEntries = allEntries
-    .filter((each1) => each1.event_id.toString().includes(chosenEvent))
-    .filter((each2) => each2.place_id.toString().includes(chosenLocation))
-    .filter((each3) => each3.place.route.name.includes(chosenRoute))
-    .filter((each4) => each4.date.includes(chosenDate))
-    .sort((a, b) => a.time.localeCompare(b.time))
-    .sort((a, b) => a.date.localeCompare(b.date));
+  .filter((each1) => each1.event.name.includes(chosenEventName))
+  .filter((each2) => each2.place.name.includes(chosenLocationName))
+  .filter((each3) => each3.place.route.name.includes(chosenRoute))
+  .filter((each4) => each4.date.includes(chosenDate))
+  .sort((a, b) => a.time.localeCompare(b.time))
+  .sort((a, b) => a.date.localeCompare(b.date));
 
   let totalAttendeeCount = 0;
   if (filteredEntries.length !== 0) {
@@ -35,6 +38,10 @@ const RouteReport = (props) => {
       .map((entry) => entry.attendee_count)
       .reduce((accumulator, runningTotal) => accumulator + runningTotal);
   }
+
+  useEffect(() => {
+    getEntries();
+  }, []);
 
   return (
     <>
@@ -77,14 +84,14 @@ const RouteReport = (props) => {
               fullWidth
               required
               label="??"
-              value={chosenEvent}
+              value={chosenEventId}
             >
-              <option aria-label="None" value="">
+              <option aria-label="None" value="" data-name="">
                 All Events
               </option>
               {events ? (
                 events.map((event) => (
-                  <option key={event.id} value={parseInt(event.id)}>
+                  <option key={event.id} value={parseInt(event.id)} data-name={event.name}>
                     {event.name}
                   </option>
                 ))
@@ -126,14 +133,14 @@ const RouteReport = (props) => {
               fullWidth
               required
               label="??"
-              value={chosenLocation}
+              value={chosenLocationId}
             >
-              <option aria-label="None" value="">
+              <option aria-label="None" value="" data-name="">
                 All Locations
               </option>
               {locations ? (
                 locations.map((place) => (
-                  <option key={place.id} value={parseInt(place.id)}>
+                  <option key={place.id} value={parseInt(place.id)} data-name={place.name}>
                     {place.name}
                   </option>
                 ))
@@ -148,7 +155,13 @@ const RouteReport = (props) => {
         {totalAttendeeCount} attendees moved in {filteredEntries.length} trips.
       </Typography>
       <div>
-        <RouteGraph filteredEntries={filteredEntries} chosenRoute={chosenRoute} chosenLocation={chosenLocation} {...props} />
+        <RouteGraph
+          filteredEntries={filteredEntries}
+          chosenRoute={chosenRoute}
+          chosenLocationId={chosenLocationId}
+          getEntries={getEntries}
+          {...props}
+        />
       </div>
     </>
   );

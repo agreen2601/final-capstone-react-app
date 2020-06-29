@@ -67,11 +67,6 @@ const EntryEditForm = (props) => {
     });
   };
 
-  let routeVal = "";
-  if (entry.place !== undefined) {
-    routeVal = entry.place.route.name;
-  }
-
   return (
     <>
       <div className="event-form-page">

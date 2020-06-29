@@ -18,9 +18,11 @@ const LocationLog = (props) => {
   const routes = props.routes;
   const events = props.events;
   const dates = props.uniqueDates;
-  const chosenLocation = props.chosenLocation;
+  const chosenLocationId = props.chosenLocationId;
+  const chosenLocationName = props.chosenLocationName;
   const chosenRoute = props.chosenRoute;
-  const chosenEvent = props.chosenEvent;
+  const chosenEventId = props.chosenEventId;
+  const chosenEventName = props.chosenEventName;
   const chosenDate = props.chosenDate;
   const handleChosenLocationChange = props.handleChosenLocationChange;
   const handleChosenRouteChange = props.handleChosenRouteChange;
@@ -29,9 +31,10 @@ const LocationLog = (props) => {
   const allEntries = props.entries;
   const getEntries = props.getEntries;
 
+  // filter entries based on dropdowns
   const filteredEntries = allEntries
-    .filter((each1) => each1.event_id.toString().includes(chosenEvent))
-    .filter((each2) => each2.place_id.toString().includes(chosenLocation))
+    .filter((each1) => each1.event.name.includes(chosenEventName))
+    .filter((each2) => each2.place.name.includes(chosenLocationName))
     .filter((each3) => each3.place.route.name.includes(chosenRoute))
     .filter((each4) => each4.date.includes(chosenDate))
     .sort((a, b) => a.time.localeCompare(b.time))
@@ -66,7 +69,7 @@ const LocationLog = (props) => {
       </Typography>
       <div className="drop-downs">
         <Grid container spacing={3}>
-        <Grid item xs={12} md={3}>
+          <Grid item xs={12} md={3}>
             <InputLabel>Date:</InputLabel>
             <Select
               id="dateId"
@@ -98,14 +101,14 @@ const LocationLog = (props) => {
               onChange={handleChosenEventChange}
               fullWidth
               required
-              value={chosenEvent}
+              value={chosenEventId}
             >
-              <option aria-label="None" value="">
+              <option aria-label="None" value="" data-name="">
                 All Events
               </option>
               {events ? (
                 events.map((event) => (
-                  <option key={event.id} value={parseInt(event.id)}>
+                  <option key={event.id} value={parseInt(event.id)} data-name={event.name}>
                     {event.name}
                   </option>
                 ))
@@ -146,14 +149,14 @@ const LocationLog = (props) => {
               onChange={handleChosenLocationChange}
               fullWidth
               required
-              value={chosenLocation}
+              value={chosenLocationId}
             >
-              <option aria-label="None" value="">
+              <option aria-label="None" value="" data-name="">
                 All Locations
               </option>
               {locations ? (
                 locations.map((place) => (
-                  <option key={place.id} value={parseInt(place.id)}>
+                  <option key={place.id} value={parseInt(place.id)} data-name={place.name}>
                     {place.name}
                   </option>
                 ))
@@ -174,18 +177,18 @@ const LocationLog = (props) => {
               <TableCell>Time</TableCell>
               <TableCell align="right">Vehicle #</TableCell>
               <TableCell align="right">Pax</TableCell>
-              {chosenDate === "" ? (
-                <TableCell align="right">Date</TableCell>
-              ) : null}
-              {chosenEvent === "" ? (
-                <TableCell align="right">Event</TableCell>
-              ) : null}
-              {chosenRoute === "" ? (
-                <TableCell align="right">Route</TableCell>
-              ) : null}
-              {chosenLocation === "" ? (
-                <TableCell align="right">Location</TableCell>
-              ) : null}
+              {/* {chosenDate === "" ? ( */}
+              <TableCell align="right">Date</TableCell>
+              {/* ) : null} */}
+              {/* {chosenEventId === "" ? ( */}
+              <TableCell align="right">Event</TableCell>
+              {/* ) : null} */}
+              {/* {chosenRoute === "" ? ( */}
+              <TableCell align="right">Route</TableCell>
+              {/* // ) : null} */}
+              {/* {chosenLocationId === "" ? ( */}
+              <TableCell align="right">Location</TableCell>
+              {/* ) : null} */}
               <TableCell align="right">Entered By</TableCell>
               <TableCell align="right">Actions</TableCell>
             </TableRow>
@@ -198,18 +201,18 @@ const LocationLog = (props) => {
                 </TableCell>
                 <TableCell align="right">{entry.vehicle_number}</TableCell>
                 <TableCell align="right">{entry.attendee_count}</TableCell>
-                {chosenDate === "" ? (
-                  <TableCell align="right">{entry.date.slice(5)}</TableCell>
-                ) : null}
-                {chosenEvent === "" ? (
-                  <TableCell align="right">{entry.event.name}</TableCell>
-                ) : null}
-                {chosenRoute === "" ? (
-                  <TableCell align="right">{entry.place.route.name}</TableCell>
-                ) : null}
-                {chosenLocation === "" ? (
-                  <TableCell align="right">{entry.place.name}</TableCell>
-                ) : null}
+                {/* {chosenDate === "" ? ( */}
+                <TableCell align="right">{entry.date.slice(5)}</TableCell>
+                {/* ) : null} */}
+                {/* {chosenEventId === "" ? ( */}
+                <TableCell align="right">{entry.event.name}</TableCell>
+                {/* ) : null} */}
+                {/* {chosenRoute === "" ? ( */}
+                <TableCell align="right">{entry.place.route.name}</TableCell>
+                {/* ) : null} */}
+                {/* {chosenLocationId === "" ? ( */}
+                <TableCell align="right">{entry.place.name}</TableCell>
+                {/* ) : null} */}
                 <TableCell align="right">
                   {entry.user.first_name} {entry.user.last_name}
                 </TableCell>

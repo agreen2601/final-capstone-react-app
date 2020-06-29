@@ -15,9 +15,9 @@ const EntryForm = (props) => {
   const locations = props.locations;
   const routes = props.routes;
   const events = props.events;
-  const chosenLocation = props.chosenLocation;
+  const chosenLocationId = props.chosenLocationId;
   const chosenRoute = props.chosenRoute;
-  const chosenEvent = props.chosenEvent;
+  const chosenEventId = props.chosenEventId;
   const chosenDate = props.chosenDate;
   const handleChosenLocationChange = props.handleChosenLocationChange;
   const handleChosenRouteChange = props.handleChosenRouteChange;
@@ -30,8 +30,8 @@ const EntryForm = (props) => {
   });
 
   // set values for entry from state from dropdowns, which carry over from form to log and back without changing until user chooses new
-  entry.place_id = chosenLocation;
-  entry.event_id = chosenEvent;
+  entry.place_id = chosenLocationId;
+  entry.event_id = chosenEventId;
   entry.date = chosenDate;
 
   // update state of entry upon form field change
@@ -84,14 +84,14 @@ const EntryForm = (props) => {
               onChange={handleChosenEventChange}
               fullWidth
               required
-              value={chosenEvent}
+              value={chosenEventId}
             >
-              <option aria-label="None" value="">
+              <option aria-label="None" value="" data-name="">
                 Choose Event
               </option>
               {events ? (
                 events.map((event) => (
-                  <option key={event.id} value={parseInt(event.id)}>
+                  <option key={event.id} value={parseInt(event.id)} data-name={event.name}>
                     {event.name}
                   </option>
                 ))
@@ -131,16 +131,16 @@ const EntryForm = (props) => {
               onChange={handleChosenLocationChange}
               fullWidth
               required
-              value={chosenLocation}
+              value={chosenLocationId}
             >
-              <option aria-label="None" value="">
-                Choose Location
-              </option>
-              {locations ? (
-                locations.map((place) => (
-                  <option key={place.id} value={parseInt(place.id)}>
-                    {place.name}
-                  </option>
+                  <option aria-label="None" value="" data-name="">
+                  Choose Locations
+                </option>
+                {locations ? (
+                  locations.map((place) => (
+                    <option key={place.id} value={parseInt(place.id)} data-name={place.name}>
+                      {place.name}
+                    </option>
                 ))
               ) : (
                 <></>

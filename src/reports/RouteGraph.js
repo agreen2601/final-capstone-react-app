@@ -4,7 +4,7 @@ import { Bar } from "react-chartjs-2";
 const RouteGraph = (props) => {
   const entries = props.filteredEntries;
   const chosenRoute = props.chosenRoute;
-  const chosenLocation = props.chosenLocation;
+  const chosenLocationId = props.chosenLocationId;
 
   // round times down to nearest 10 minutes (slice off the last number) and put that and attendee counts into new array
   const times = entries.map((entry) => entry.time.slice(0, 4));
@@ -63,7 +63,7 @@ const RouteGraph = (props) => {
 
   let routeColor = "black";
   if (entries.length !== 0) {
-    if (chosenLocation === "" && chosenRoute === "") {
+    if (chosenLocationId === "" && chosenRoute === "") {
     } else {
       routeColor = entries[0].place.route.color;
     }
